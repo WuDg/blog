@@ -7,7 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.repository == 'WuDg/blog'
     steps:
       - name: Sync to Gitee
         uses: wearerequired/git-mirror-action@master
