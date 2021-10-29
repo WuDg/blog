@@ -1,0 +1,25 @@
+name: Sync
+
+on:
+  push:
+    branches: [master, main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.repository == 'WuDG/blog'
+    steps:
+      - name: Sync to Gitee
+        uses: wearerequired/git-mirror-action@master
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.GITEE_RSA_PRIVATE_KEY }}
+        with:
+          source-repo: git@github.com:WuDg/blog.git
+          destination-repo: git@gitee.com:WuDG/blog.git
+      
+      - name: Build Gitee Pages
+        uses: WuDG/blog@master
+        with:
+            gitee-username: WuDG
+            gitee-password: ${{ secrets.GITEE_PASSWORD }}
+            gitee-repo: WuDG/blog

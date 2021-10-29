@@ -1,0 +1,23 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Lint
+        run: |
+          pip install flake8
+          flake8 main.py
