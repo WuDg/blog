@@ -106,7 +106,7 @@ A：1 或 2，如果常量池中有字符串常量“abc”，则只在堆中创
 ### 3.2 基本类型、包装类型、常量池
 > Byte,Short,Integer,Long,Character,Boolean
 
-**性能与资源之间的权衡
+**性能与资源之间的权衡**
 * Byte,Short,Integer,Long 默认创建了数据[-128,127] 的相关类型的缓存数据
 * Character 创建了数值在 [0.127] 范围的缓存数据，Boolean 直接返回创建好的 True or False
 
