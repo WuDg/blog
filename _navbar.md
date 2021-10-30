@@ -1,10 +1,13 @@
 <!-- _navbar.md -->
 
+<!--
 * [En](/)
 * [中文](/zh-cn/)
+-->
 
 <!-- _navbar.md -->
 
+<!--
 * Getting started
 
   * [Quick start](quickstart.md)
@@ -18,3 +21,4 @@
   * [Using plugins](plugins.md)
   * [Markdown configuration](markdown.md)
   * [Language highlight](language-highlight.md)
+-->

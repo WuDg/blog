@@ -4,7 +4,6 @@ Flask 以来 Jinja 模板引擎和 Werkzeug WSGI 套件
 
 [原文档地址](https://dormousehole.readthedocs.io/en/latest/index.html)
 
-![flask-logo](../../images/flask-logo.png)
 
 ## 一、安装
 
