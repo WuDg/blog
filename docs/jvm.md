@@ -25,7 +25,6 @@ position： 杭州乐佳大厦/博彦
 
 **Java运行时数据区域JDK1.8**
 
-![Java运行时数据区域JDK1.8](../../images/JDK1.8-runtime-area.png)
 
 **线程私有**
 * PC：当前线程所执行的字节码的行号指示器，字节码解释器通过改变 PC 来读取指令。分支、循环、跳转、异常处理、线程恢复都依赖 PC。唯一无 OOM Error
