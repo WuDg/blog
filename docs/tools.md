@@ -47,6 +47,13 @@
 [地址](https://www.docker.com/)
 
 
+### 9. Event-Bus
+> 开源，基于发布/订阅模式
+
+[地址](https://greenrobot.org/eventbus/)
+
+
+
 ## 二、实用类
 ---
 
