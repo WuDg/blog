@@ -92,7 +92,6 @@ numChildren:当前节点的子节点个数
  ### 2.4 Watcher（事件监听器）
  > 允许节点注册 Watch，在某些特定事件触发时，zk 服务端会将事件通知到感兴趣的客户端
 
-![watche机制](../../images/watche机制.png)
 
 ### 2.5 Session（会话）
 > 可以看作是 zk 与客户端之间的 TCP 长连接
@@ -102,22 +101,21 @@ zk 与客户端创建 session 之前，会为客户端分配一个 sessionID，�
 
 ## 三、zk 集群
 > 为了保证高可用，zk 需集群部署，只要集群中大部分机器可用，则集群可用。集群间通过 ZAB（zk Atomic Broadcase） 保证数据一致性
-![zookeeper集群](../../images/zookeeper集群.png)
+
 
 典型集群模式：Master/Slave（主从模式）
 
 ### 3.1 zk 集群中角色
 > Leader,Follower,Observer
-![zookeeper集群中的角色](../../images/zookeeper集群中的角色.png)
+
 * Leader：提供读写，负责投票的发起和决议，更新系统状态
 * Follower：提供读，参与选举投票，转发写请求给 Leader
 * Observer：提供读，不参与 Leader 选举
 
 **leader写数据**
-![leader写数据](../../images/leader写数据.jpg)
 
 **读数据**
-![读数据](../../images/读数据.jpg)
+
 
 当 Leader 服务器出现网络中断、崩溃退出与重启等异常情况，就会进入 Leader 选举过程
 1. Leader election（选举阶段）：只要一个节点得到超过半数节点的票数，则可成为 Leader
