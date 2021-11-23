@@ -62,6 +62,10 @@
 
 [地址](https://www.wondercv.com/)
 
+### 2. 免费图床
+> Github+jsDelivr+PicGo 打造稳定快速、高效免费图床
+
+[推荐文档](https://blog.csdn.net/qq_36759224/article/details/98058240)
 
 
 ## 三、笔记类
