@@ -3,7 +3,7 @@
 ```md
 author: WuDG
 datetime： 10:4040 星期二 2021年8月3日
-position： 杭州乐佳大厦/博彦
+position： 杭州乐佳大厦
 ```
 ```
 我曾七次鄙视自己的灵魂
@@ -97,7 +97,7 @@ redis 内部使用文件处理器，单线程架构。采用 IO 多路复用机�
 * memcache 纯内存，数据量不能超过内存，redis 支持持久化
 * memcache 只支持 string，redis 支持多种
 
-## 客户端
+## 十一、客户端
 * Jedis
 * Redisson
 * Lettuce

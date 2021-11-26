@@ -14,6 +14,7 @@
 
 [地址](https://www.hutool.cn/)
 
+
 ### 3. Validator
 > 表示和验证应用程序约束
 
@@ -31,15 +32,18 @@
 
 [地址](https://www.rabbitmq.com/)
 
+
 ### 6. Nginx
 > 静态资源服务器
 
 [地址](https://www.nginx.com/)
 
+
 ### 7. SpringSecurity
 > 认证和授权框架。Spring Security是一个功能强大且高度可定制的身份验证和访问控制框架。
 
 [地址](https://spring.io/projects/spring-security)
+
 
 ### 8. Docker
 > 应用容器引擎
@@ -61,6 +65,7 @@
 优势：一键导出、简历推送、岗位投递、简历质量评分
 
 [地址](https://www.wondercv.com/)
+
 
 ### 2. 免费图床
 > Github+jsDelivr+PicGo 打造稳定快速、高效免费图床
