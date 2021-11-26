@@ -21,6 +21,7 @@
 * [k8s私有化部署](docs/k8s私有化部署.md)
 * [架构](docs/架构.md)
 * [分布式ID生成方案](docs/分布式ID生成方案.md)
+* [分布式事务](docs/分布式事务.md)
 * [zookeeper](docs/zookeeper.md)
 * [收藏文章](docs/收藏文章.md)
 * [书签](docs/书签.html)
