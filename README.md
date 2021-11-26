@@ -1,3 +1,16 @@
+
+<p align="center">
+<a href="https://github.com/wudg/blog" target="_blank">
+	<img src="https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/logo1.png" width=""/>
+</a>
+</p>
+<p align="center">
+  <a href="https://javaguide.cn/"><img src="https://img.shields.io/badge/阅读-read-brightgreen.svg" alt="阅读"></a>
+  <img src="https://img.shields.io/github/stars/wudg/blog" alt="stars"/>
+  <img src="https://img.shields.io/github/forks/wudg/blog" alt="forks"/>
+  <img src="https://img.shields.io/github/issues/wudg/blog" alt="issues"/>
+</p>
+
 <!-- docs/home.md -->
 * [Home](/)
 * [技术栈](docs/技术栈.md)
