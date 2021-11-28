@@ -11,14 +11,16 @@
   <img src="https://img.shields.io/github/issues/wudg/blog" alt="issues"/>
 </p>
 
-<!-- docs/home.md -->
+## 一、清单
+---
+
 * [Home](/)
 * [技术栈](docs/技术栈.md)
 * [Redis](docs/redis.md)
 * [JUC](docs/juc.md)
 * [JVM](docs/jvm.md)
 * [七周七语言](docs/七周七语言.md)
-* [k8s私有化部署](docs/k8s私有化部署.md)
+* [k8s常用资源](docs/k8s常用资源.md)
 * [架构](docs/架构.md)
 * [分布式ID生成方案](docs/分布式ID生成方案.md)
 * [分布式事务](docs/分布式事务.md)
@@ -29,22 +31,23 @@
 * [git](docs/git.md)
 * [github 图床搭建](docs/github图床搭建.md)
 * [JavaSE总结](docs/JavaSE总结.md)
-* [hashmap详细](docs/hashmap详细.md)
+* [HashMap详细](docs/HashMap详细.md)
 * [mysql-锁](docs/mysql.md)
 * [spring-score](docs/spring-core.md)
 * [好用工具](docs/tools.md)
+* [pages-action](docs/pages-action.md)
 * [Flask](docs/flask.md)
 
 
+# 二、站点
 ---
 
+目前支持以下三个站点访问：
 
-# 开发实践
----
-
-
-
-# 站点
----
+* Gitee Pages: [https://wudg.gitee.io/blog](https://wudg.gitee.io/blog)
+* GitHub Pages: [https://wudg.github.io/blog](https://wudg.github.io/blog)
+* 在线阅读: [http://blog.wudg.work](http://blog.wudg.work)
 
 本项目基于 [Docsify](https://docsify.js.org/#/) 进行构建，并使用开源小工具 Gitee Pages Actions 实现站点的自动部署更新。
+
+

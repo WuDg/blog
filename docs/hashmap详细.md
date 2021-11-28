@@ -1,10 +1,11 @@
-# HashMap详细解释
+# HashMap详细
+---
 
 [原文地址](https://blog.csdn.net/m0_46494737/article/details/114499465)
 
-## HashMap基础
+## 一、HashMap基础
 
-### 数组优缺点
+### 1.1 数组优缺点
 
 **优点**
 
@@ -19,7 +20,7 @@
 * 数据只能存储一种类型的数据
 * 增加、删除元素效率慢
 
-### 链表的优缺点
+### 1.2 链表的优缺点
 
 **优点**
 
@@ -32,7 +33,7 @@
 * 不支持随机查找，必须从第一个开始遍历，查找效率低
 * 链表中存储元素需要更多的内存，因为边聊中每个结点都包含一个指针，需要额外的内存空间
 
-### 散列表
+### 1.3 散列表
 
 也叫哈希表（Hash table），根据关键码值（key value）而直接进行访问的数据结构。即通过键值映射到表中一个位置来访问记录，以加快查找速度，这个映射函数叫`散列函数`，存放记录的数组叫做`散列表`
 
@@ -43,7 +44,7 @@
 * 无序：散列表是通过hash函数直接找到存储地址的
 * 哈希冲突：
 
-### 什么是哈希？特点是什么？
+### 1.4 什么是哈希？特点是什么？
 
 **核心理论**：Hash也称散列、哈希。基本原理就是把任意长度的输入，通过Hash算法变成固定长度的输出，这样的规则就是对应的Hash算法，而原始数据映射后的二进制串就是哈希值
 
@@ -56,13 +57,13 @@
 
 
 
-## HashMap原理讲解
+## 二、HashMap原理讲解
 
-### HashMap的继承体系
+### 2.1 HashMap的继承体系
 
 
 
-### Node数据结构分析
+### 2.2 Node数据结构分析
 
 Node类是HashMap的一个静态内部类
 
@@ -108,14 +109,14 @@ static class Node<K,V> implements Map.Entry<K,V> {
 }
 ```
 
-### 底层存储结构介绍
+### 2.3 底层存储结构介绍
 
 
 
-### put数据原理分析
+### 2.4 put数据原理分析
 
 
-### HashMap在JDK 8中为什么引入红黑树
+### 2.5 HashMap在JDK 8中为什么引入红黑树
 
 `在链表长度大于8且桶数量大于64时变为红黑树，以加快检索速度`
 
@@ -123,13 +124,13 @@ static class Node<K,V> implements Map.Entry<K,V> {
 
 
 
-### HashMap扩容原理
+### 2.6 HashMap扩容原理
 
 使用一个新的数组代替原有的数组，对原数组的所有数据进行重新计算插入新数组，之后指向新数组。如果扩容器数组以及达到最大了，那么将直接将阈值设置成最大整形并返回。扩容是为了提高查询效率
 
 
 
-### HashMap构造方法源码分析
+### 2.7 HashMap构造方法源码分析
 
 ```java
 static final int DEFAULT_INITIAL_CAPACITY = 1 << 4;//16
@@ -192,7 +193,7 @@ final float loadFactor;//负载因子  threshold = capacity * loadFactor
 
 ```
 
-### HashMap put方法源码分析
+### 2.8 HashMap put方法源码分析
 
 ```java
 public V put(K key, V value) {
@@ -257,7 +258,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 **流程图**
 
 
-### HashMap resize扩容方法源码分析
+### 2.9 HashMap resize扩容方法源码分析
 
 扩容目的：解决哈希冲突导致链化影响查询
 
@@ -359,7 +360,7 @@ final Node<K,V>[] resize() {
 
 
 
-### HashMa get方法
+### 2.10 HashMa get方法
 
 ```java
 public V get(Object key) {
@@ -395,7 +396,7 @@ final Node<K,V> getNode(int hash, Object key) {
 
 
 
-### HashMap remove方法
+### 2.11 HashMap remove方法
 
 ```java
 final Node<K,V> removeNode(int hash, Object key, Object value,

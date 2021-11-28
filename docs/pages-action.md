@@ -1,4 +1,5 @@
 # pages-action
+---
 
 ## 第一步
 1. gitee->settings->公钥管理 启用 ssh-key
@@ -34,7 +35,7 @@ jobs:
           destination-repo: git@gitee.com:WuDG/source-parent.git
       
       - name: Build Gitee Pages
-        uses: yanglbme/gitee-pages-action@main
+        uses: wudg/gitee-pages-action@main
         with:
             gitee-username: WuDG
             gitee-password: ${{ secrets.GITEE_PASSWORD }}

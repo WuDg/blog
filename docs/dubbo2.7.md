@@ -1,10 +1,10 @@
-# 入门
+# 一、入门
 
 dubbo入门
 
 
 
-## 背景
+## 1.1 背景
 
 网站应用演进
 
@@ -27,7 +27,7 @@ dubbo入门
 
 
 
-## 需求
+## 1.2 需求
 
 dubbo解决的需求
 
@@ -41,7 +41,7 @@ dubbo解决的需求
 
 
 
-## 架构
+## 1.3 架构
 
 dubbo架构
 
@@ -68,7 +68,7 @@ dubbo架构
 
 Dubbo架构特点：连通性、健壮性、伸缩性、升级性（面向对来架构）
 
-### 连通性
+### 1.3.1 连通性
 
 * 注册中心负责服务地址的注册与查找，相当于目录服务，服务提供者和消费者只在启动时与注册中心交互，注册中心不转发请求，压力较小
 * 监控中心负责统计各服务调用次数，调用时间等，统计现在内存汇总后每分钟一次发送到监控中心服务器，并以报表展示
@@ -79,7 +79,7 @@ Dubbo架构特点：连通性、健壮性、伸缩性、升级性（面向对来
 * 注册中心和监控中心全部宕机，不影响已运行的提供者和消费者，消费者在本地缓存了提供者列表
 * 注册中心和监控中心都是可选的，服务消费者可以直连服务提供者
 
-### 健壮性
+### 1.3.2 健壮性
 
 * 监控中心宕机不影响使用，只是丢失部分采样数据
 * 数据库宕机后，注册中心仍能通过缓存提供服务列表查询，但不能注册新服务
@@ -88,12 +88,12 @@ Dubbo架构特点：连通性、健壮性、伸缩性、升级性（面向对来
 * 服务提供者无状态，任意一台宕机后，不影响使用
 * 服务提供者全部宕机后，服务消费者应用将无法使用，并无限次重连等待服务提供者恢复
 
-### 伸缩性
+### 1.3.3 伸缩性
 
 * 注册中心为对等集群，可动态增加机器部署实例，所有客户端将自动发现新的注册中心
 * 服务提供者无状态，可动态增加机器部署实例，注册中心将推送新的服务提供者信息给消费者
 
-### 升级性
+### 1.3.4 升级性
 
 当服务集群规模进一步扩大，带动IT治理结构进一步升级，需要实现动态部署，进行流动计算，先有分布式服务架构不会带来阻力。下图是未来可能的一种架构：
 
@@ -115,11 +115,11 @@ Monitor：统计服务的调用次数和调用时间的监控中心
 
 
 
-## 用法
+## 1.4 用法
 
 dubbo简单入门
 
-### 本地服务Spring配置
+### 1.4.1 本地服务Spring配置
 
 `local.xml`
 
@@ -130,7 +130,7 @@ dubbo简单入门
 </bean>
 ```
 
-### 远程服务Spring配置
+### 1.4.2 远程服务Spring配置
 
 服务提供方`remote-provider.xml`
 
@@ -153,13 +153,13 @@ dubbo简单入门
 ```
 
 ---
-# 快速开始
+# 二、快速开始
 
 `dubbo`采用全`Spring`配置方式，透明化接入应用，无API入侵，只需用`Spring`加载`dubbo`配置即可
 
 如果不使用`Spring`，也可通过`API`方式进行调用
 
-## 服务提供者
+## 2.1 服务提供者
 
 **定义接口服务**
 
@@ -235,7 +235,7 @@ public class Provider {
 }
 ```
 
-## 服务消费者
+## 2.2 服务消费者
 
 **通过Spring配置引用远程服务**
 
@@ -285,17 +285,17 @@ public class Consumer {
 
 ---
 
-# 依赖
+# 三、依赖
 
 dubbo依赖介绍
 
-## 必须依赖
+## 3.1 必须依赖
 
 JDK 1.6+
 
 
 
-## 缺省依赖
+## 3.2 缺省依赖
 
 ```fallback
 [INFO] +- com.alibaba:dubbo:jar:2.5.9-SNAPSHOT:compile
@@ -304,7 +304,7 @@ JDK 1.6+
 [INFO] |  \- org.jboss.netty:netty:jar:3.2.5.Final:compile
 ```
 
-## 可选依赖
+## 3.3 可选依赖
 
 使用相应实现策略时自行加入
 
@@ -340,11 +340,11 @@ JDK 1.6+
 
 ---
 
-# 成熟度
+# 四、成熟度
 
 介绍dubbo各功能、策略的成熟度
 
-## 功能成熟度
+## 4.1 功能成熟度
 
 | Feature    | Maturity | Strength                                                     | Problem                            | Advise         | User     |
 | ---------- | -------- | ------------------------------------------------------------ | ---------------------------------- | -------------- | -------- |
@@ -373,7 +373,7 @@ JDK 1.6+
 | 访问日志   | Tested   | 访问日志，用于记录调用信息                                   | 本地存储，影响性能，受磁盘大小限制 | 试用           |          |
 | 分布式事务 | Research | JTA/XA三阶段提交事务                                         | 不稳定                             | 不可用         |          |
 
-## 策略成熟度
+## 4.2 策略成熟度
 
 | Feature           | Maturity | Strength                                                     | Problem                                    | Advise                   | User |
 | ----------------- | -------- | ------------------------------------------------------------ | ------------------------------------------ | ------------------------ | ---- |
@@ -440,11 +440,11 @@ JDK 1.6+
 
 ---
 
-# Dubbo配置
+# 五、Dubbo配置
 
 以不同方式配置dubbo应用
 
-## XML配置
+## 5.1 XML配置
 
 以XML配置方式来配置dubbo
 
@@ -520,7 +520,7 @@ JDK 1.6+
 
 
 
-### 不同粒度配置覆盖关系
+### 5.1.1 不同粒度配置覆盖关系
 
 以timeout为例，其他retries，loadbalance，actives类似
 
@@ -535,7 +535,7 @@ JDK 1.6+
 
 
 
-## 动态配置中心
+## 5.2 动态配置中心
 
 配置中心职责
 
@@ -565,7 +565,7 @@ configCenter.setAddress("zookeeper://127.0.0.1:2181");
 
 
 
-### 外部化配置
+### 5.2.1 外部化配置
 
 目的之一：实现配置的集中式管理
 
@@ -606,7 +606,7 @@ dubbo.application.qos.port=33333
 
 全局配置是所有应用共享的，应用级配置是每个应用自己维护且只对自身可见
 
-### Zookeeper
+### 5.2.2 Zookeeper
 
  ```xml
 <dubbo:config-center address="zookeeper://127.0.0.1:2181"/>
@@ -621,13 +621,13 @@ dubbo.application.qos.port=33333
 * dubbo/application，分别用来隔离全局配置、应用级别配置。dubbo是默认group值，application对应应用名
 * dubbo.properties，此节点的node value存储具体配置内容
 
-### Apollo
+### 5.2.3 Apollo
 
 ```xml
 <dubbo:config-center protocol="apollo" address="127.0.0.1:2181"/>
 ```
 
-### 自己加载外部化配置
+### 5.2.4 自己加载外部化配置
 
 dubbo对配置中心的支持，本质上就是把远程的配置拉取到本地，然后和本地的配置做一次融合
 
@@ -642,7 +642,7 @@ ConfigCenterConfig configCenter = new ConfigCenterConfig();
 configCenter.setExternalConfig(dubboConfigurations);
 ```
 
-### 服务治理
+### 5.2.5 服务治理
 
 `Zookeeper`
 
@@ -663,7 +663,7 @@ configCenter.setExternalConfig(dubboConfigurations);
 
 
 
-## 属性配置
+## 5.3 属性配置
 
 以属性配置的方式来来配置你的`dubbo`应用
 
@@ -675,7 +675,7 @@ configCenter.setExternalConfig(dubboConfigurations);
 -Ddubbo.properties.file=xxx.properties
 ```
 
-### 映射规则
+### 5.3.1 映射规则
 
 `xml`和`properties`配置映射
 
@@ -685,7 +685,7 @@ configCenter.setExternalConfig(dubboConfigurations);
 
 `dubbo.proptocol.rmi.port=1099` 相当于 `<dubbo:protocol id="rmi" name="rmi" port="1099" />`
 
-### 重写与优先级
+### 5.3.2 重写与优先级
 
 ![properties-override](https://dubbo.apache.org/imgs/user/dubbo-properties-override.jpg)
 
@@ -693,7 +693,7 @@ JVM -D > XML -> Properties
 
 
 
-## 自动加载环境变量
+## 5.4 自动加载环境变量
 
 在dubbo自动加载环境变量
 
@@ -717,7 +717,7 @@ DUBBO_ENV_KEYS = "DUBBO_TAG1, DUBBO_TAG2"
 
 
 
-## API配置
+## 5.5 API配置
 
 以API配置的方式来配置Duboo应用
 
@@ -725,7 +725,7 @@ DUBBO_ENV_KEYS = "DUBBO_TAG1, DUBBO_TAG2"
 
 如 `ApplicationConfig.setName("xxx") `对应 `<dubbo:application name="xxx" />`
 
-### 服务提供者
+### 5.5.1 服务提供者
 
 ```java
 import org.apache.dubbo.rpc.config.ApplicationConfig;
@@ -769,7 +769,7 @@ service.setVersion("1.0.0");
 service.export();
 ```
 
-### 服务消费者
+### 5.5.2 服务消费者
 
 ```java
 import org.apache.dubbo.rpc.config.ApplicationConfig;
@@ -803,7 +803,7 @@ XxxService xxxService = reference.get(); // 注意：此代理对象内部封装
 
 
 
-### 特殊场景
+### 5.5.3 特殊场景
 
 **方法级设置**
 
@@ -844,10 +844,10 @@ reference.setUrl("dubbo://10.20.130.230:20880/com.xxx.XxxService");
 
 
 
-## 注解配置
+## 5.6 注解配置
 
 2021-1-15 14:15:08
 
 
 
-## 配置加载流程
+## 5.7 配置加载流程

@@ -1,7 +1,15 @@
-# 说一说分布式唯一ID
+# 分布式唯一ID
+---
+
+```md
+author: WuDG
+datetime： 23:40:40 星期二 2021年11月26日
+position： 杭州
+```
+
 > 全局唯一、高性能、好接入、递增
 
-1. 雪花算法
+## 1. 雪花算法
 ```properties
 64 = 1（正数 0） + 41（毫秒时间戳） + 10（机器ID） + 12（序列号）
 使用时长：(2^41 - 1)/(1000*60*60*24*365) = 69年
@@ -9,20 +17,20 @@
 序列号：2^12-1 = 4095 （同一毫秒生成ID数量）
 ```
 
-2. UUID
+## 2. UUID
 ```properties
 String uuid = UUID.randomUUID().toString().replaceAll("-","");
 简单、无序、无具体业务含义、过长
 ```
 
-3. 基于数据库自增
+## 3. 基于数据库自增
 ```properties
 基于数据库的 auto_increment 自增ID
 需要一个单独的 MySQL 实例用来生成ID
 访问量激增时 MySQL 本身就是系统瓶颈，不支持
 ```
 
-4. 基于数据库集群
+## 4. 基于数据库集群
 ```properties
 在上面单个数据库基础上
 解决数据库单点压力
@@ -30,7 +38,7 @@ String uuid = UUID.randomUUID().toString().replaceAll("-","");
 扩容困难
 ```
 
-5. 基于数据库的号段模式
+## 5. 基于数据库的号段模式
 ```properties
 主流之一
 从数据库批量获取自增ID
@@ -44,7 +52,7 @@ CREATE TABLE id_generator (
 ) 
 ```
 
-6. 基于redis模式
+## 6. 基于redis模式
 ```properties
 利用 redis 的 incr 命令实现ID的原子性自增
 考虑持久化问题
@@ -53,7 +61,7 @@ RDB会定时打一个快照进行持久化，假如连续自增但redis没及时
 AOF会对每条写命令进行持久化，即使Redis挂掉了也不会出现ID重复的情况，但由于incr命令的特殊性，会导致Redis重启恢复的数据时间过长。
 ```
 
-7. 百度（uid-generator）
+## 7. 百度（uid-generator）
 ```properties
 基于雪花算法
 支持自定义时间戳、工作机器ID和序列号等位数
@@ -61,7 +69,7 @@ AOF会对每条写命令进行持久化，即使Redis挂掉了也不会出现ID�
 64 = 1（正数 0） + 28（秒） + 22（机器ID） + 13（序列号）
 ```
 
-8. 美团（Leaf）
+## 8. 美团（Leaf）
 ```properties
 同时支持号段模式和雪花算法模式
 号段模式：
@@ -77,7 +85,7 @@ CREATE TABLE `leaf_alloc` (
 依赖于 ZK，Lead 中国呢 workId 基于 zk 的顺序ID来生成
 ```
 
-9. 滴滴（TinyId）
+## 9. 滴滴（TinyId）
 ```properties
 原理如 Leaf 的号段模式
 
