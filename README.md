@@ -30,6 +30,7 @@
 * [书签](docs/书签.html)
 * [dubbo](docs/dubbo2.7.md)
 * [git](docs/git.md)
+* [ruby](docs/ruby.md)
 * [github 图床搭建](docs/github图床搭建.md)
 * [JavaSE总结](docs/JavaSE总结.md)
 * [HashMap详细](docs/HashMap详细.md)
