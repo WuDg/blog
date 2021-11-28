@@ -1,4 +1,5 @@
 # MySQL explain
+---
 
 > explain关键字可以模拟MySQL优化器执行SQL语句，可以很好地分析SQL语句或表结构的性能瓶颈
 
