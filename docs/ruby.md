@@ -8,7 +8,8 @@
 `CMD`中输入`irb`进入`Ruby`交互模式
 
 ## 第一章 字符串、数字、类和对象
-`易于使用`
+
+### 1.1 易于使用
 
 ```shell
 irb(main):005:0> puts 'hello, world'
@@ -46,7 +47,7 @@ ruby hello.rb
 Hello wudiguang
 ```
 
-`双引号解析变量 #{}`
+### 1.2 双引号解析变量 #{}
 ```shell
 irb(main):024:0> puts "hello, #{name}"
 hello, wudiguang
@@ -55,7 +56,7 @@ irb(main):025:0> puts 'hello, #{name}'
 hello, #{name}
 ```
 
-`浮点数`
+### 1.3 浮点数
 ```shell
 irb(main):070:0> taxrate = 0.175
 => 0.175
@@ -70,7 +71,7 @@ irb(main):074:0> subtotal = s.to_f
 => 145.45
 ```
 
-`条件语句`
+### 1.4 条件语句
 ```ruby
 taxrate = 0.175
 print "Enter price (ex tax): "
@@ -86,7 +87,7 @@ tax = subtotal * taxrate
 puts "Tax on $#{subtotal} is $#{tax}, so grand total is $#{subtotal+tax}"
 ```
 
-`局部变量与全局变量`
+### 1.5 局部变量与全局变量
 ```ruby
 # 三个名为 localVar 的局部变量，一个在 main 作用域，另外两个分别在独立的方法作用域内，互不影响
 # 一个以 $ 字符开头的全局变量拥有全局作用域，类比 Java 中的 static 变量
@@ -126,7 +127,7 @@ bonjour
 hello
 ```
 
-`类与对象`
+### 1.6 类与对象
 > 概念同 Java 中的类和对象
 
 
@@ -161,7 +162,7 @@ irb(main):107:0> mydog
 =end
 ```
 
-`构造方法-new 与 initialize`
+### 1.7 构造方法-new 与 initialize
 
 ```ruby
 # 当一个类包含名为 initialize 的方法，它会在使用 new 方法创建对象时自动被调用。
@@ -173,7 +174,7 @@ def initialize( aName, aDescription )
     @description = aDescription
 end
 ```
-`查看对象内部细节`
+### 1.8 查看对象内部细节
 
 ```shell
 irb(main):136:0> mydog.inspect
@@ -197,7 +198,180 @@ puts(Dog.to_s)  #=> Dog
 
 ## 第二章 类的层次结构、属性与变量
 
+### 2.1 类的层次结构、属性与变量
+> 继承
+
+### 2.2 超类&子类
+> 同 Java
+
+```ruby
+class Treasure < Thing
+# 定义get
+attr_reader :description
+# 定义set
+attr_writer :description
+# 定义get、set
+attr_accessor :value
+# 同时定义多个变量
+=begin
+attr_reader :name, :description
+attr_writer(:name, :description)
+attr_accessor(:value, :id, :owner)
+=end
+```
+
+### 2.3 类变量
+```ruby
+@@num_things = 0
+```
+
+### 2.4 类常量
+> 以大写字母开头
+
+```ruby
+class X
+  A = 10
+  
+  class Y
+  end
+end
+=begin
+(main):162:0> X::A
+=> 10
+irb(main):163:0> X::Y.new
+=> #<X::Y:0x0000021a18b94c98>
+=end
+```
+
+```ruby
+class A
+  def b
+    puts( "b" )
+  end
+end
+class B < A
+  def ba2
+    puts( "ba2" )
+  end
+end
+```
+
+可以将功能添加到 Ruby 的标准库中，如 Array
+```ruby
+class Array
+  def gribbit
+    puts( "gribbit" )
+  end
+end
+# [1,2,3].gribbit
+```
+
+
 ## 第三章 字符串和范围
+### 3.1 字符串和范围
+> 在双引号嵌入 #{} 可以解析变量
+> 双引号替代分隔符：%Q和/，%/和/
+> 单引号替代分隔符：%q和/
+
+```ruby
+print('Enter your name: ')
+name = gets()
+puts("Hello #{name}")
+```
+
+### 3.2 反引号
+> 将命令传递给操作系统执行
+
+```ruby
+puts(`dir`)
+puts(%x/dir/)
+puts(%x{dir})
+```
+
+### 3.3 字符串处理
+
+```ruby
+# 使用 << 方法时，后面可以直接附加一个整数
+# 使用 + 号或者空格时，整数必须使用 to_s 方法先转换为字符串
+# 一些字符串方法实际上是在不创建新的字符串对象的情况下改变其本身，这些方法通常以感叹号结尾，如 capitalize!
+# $/ 作为 "记录分隔符"
+# 使用 chop 和 chomp 方法删除换行符，建议使用 chomp，它仅会删除最后的记录分隔符
+s = "Hello " << "world"
+s = "Hello " + "world"
+s = "Hello " "world"
+s4 = "This ", "is", " not a string!", 10, print("print (s4):", s4, "\n")
+```
+
+```shell
+irb(main):290:0> s = "Hello World"
+=> "Hello World"
+irb(main):291:0> puts(s[1])
+e
+=> nil
+irb(main):292:0> puts(s[1, 1])
+e
+=> nil
+irb(main):293:0> puts(s[1..3])
+ell
+=> nil
+```
+
+### 3.4 格式化字符串
+
+```
+%d – decimal number
+%f – floating point number
+%o – octal number
+%p – inspect object
+%s – string
+%x – hexadecimal number
+```
+
+```ruby
+printf("%0.02f", 10.12945)  # displays 10.13
+```
+
+### 3.5 范围
+```ruby
+a = (1..10)
+b = (-10..-1)
+c = (-10..10)
+d = ('a'..'z')
+# 可以使用三个点或者两个点，三个点则不包括最后一个值
+e = ('a'..'z')   # this two-dot range = 'a'..'z'
+f = ('a'...'z')   # this three-dot range = 'a'..'y'
+(1..10).to_a
+# [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+```
+
+`范围迭代器`
+```ruby
+for i in (1..10) do
+    puts( i )
+end
+```
+
+`跨行字符串-HereDoc`
+```ruby
+hdoc1 = <<EODOC
+I wandered lonely as a #{"cloud".upcase},
+That floats on high o'er vale and hill...
+EODOC
+```
+
+默认情况下，HereDoc 被视为双引号字符串，因此表达式 #{"cloud".upcase} 将会被执行
+
+```ruby
+p %q/dog cat #{1+2}/  #=> "dog cat \#{1+2}"
+p %Q/dog cat #{1+2}/  #=> "dog cat 3"
+p %/dog cat #{1+2}/  #=> "dog cat 3"
+p %w/dog cat #{1+2}/  #=> ["dog", "cat", "\#{1+2}"]
+p %W/dog cat #{1+2}/  #=> ["dog", "cat", "3"]
+p %r|^[a-z]*$|  #=> /^[a-z]*$/
+p %s/dog/ #=> :dog
+p %x/vol/ #=> " Volume in drive C is OS [etc...]"
+```
+
 
 ## 第四章 数组和哈希表
 
