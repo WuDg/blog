@@ -31,6 +31,7 @@
 * [dubbo](docs/dubbo2.7.md)
 * [git](docs/git.md)
 * [ruby](docs/ruby.md)
+* [kubernetes](docs/kubernetes.md)
 * [github 图床搭建](docs/github图床搭建.md)
 * [JavaSE总结](docs/JavaSE总结.md)
 * [HashMap详细](docs/HashMap详细.md)

@@ -1,19 +1,22 @@
 # flask
+
 ---
 
 > Flask 中文文档（2.0.1）
-Flask 以来 Jinja 模板引擎和 Werkzeug WSGI 套件
+> Flask 以来 Jinja 模板引擎和 Werkzeug WSGI 套件
 
 [原文档地址](https://dormousehole.readthedocs.io/en/latest/index.html)
-
 
 ## 一、安装
 
 ### python 版本
+
 > Flask 支持 Python 3.6 及更高版本
 
 ### 依赖
+
 > 当安装 Flask 时，以下套件软件会被自动安装
+
 * Werkzeug 用于实现 WSGI，应用和服务之间的标准 Python 接口
 * Jinja 用于渲染页面的模板语言
 * MarkupSafe 与 Jinja 共用，防止注入攻击
@@ -21,16 +24,18 @@ Flask 以来 Jinja 模板引擎和 Werkzeug WSGI 套件
 * Click 是一个命令行应用框架。用于提供 Flask 命令，并允许添加自定义管理命令
 
 ### 可选依赖
+
 * Blinker 为信号提供支持
 * python-dotenv 当运行 flask 命令时通过 dotenv 设置环境变量提供支持
 * Warchdog：为开发服务器提供快速高效的重载
 
 ### 虚拟环境
-> 为每个项目安装单独的 Python 库，隔离不同项目间的 Python 库
-Python 内置了用于创建虚拟环境的 venv 模块
 
+> 为每个项目安装单独的 Python 库，隔离不同项目间的 Python 库
+> Python 内置了用于创建虚拟环境的 venv 模块
 
 ### 创建虚拟环境
+
 > 创建完成后文件夹中会生成一个 venv 文件夹
 
 ```shell
@@ -39,8 +44,6 @@ python3 -m venv venv
 # 激活
 . venv/bin/activate
 ```
-
-
 
 ### 安装 Flask
 
@@ -51,6 +54,7 @@ pip install Flask
 ## 二、快速上手
 
 ### 一个最小的应用
+
 ```python
 from flask import Flask
 
@@ -60,19 +64,20 @@ app = Flask(__name__)
 def hello_world():
     return "<p>Hello, World!</p>"
 ```
+
 1. 导入 Flask，该类的实例会成为 WSGI 应用
 2. 使用 route() 指定 http url
 3. 接口默认返回 html
 
 `不要使用 flask.py 作为应用名称，会与 Flask 本身冲突`
 
-
 运行方式：
+
 1. hello.py  ->  export FLASK_APP=hello  ->  flask run --host=0.0.0.0
 2. app.py(wsgi.py)  ->  flask run --host=0.0.0.0
 
-
 ### 路由
+
 > 使用 route() 装饰器把函数绑定到 URL
 
 ```python
@@ -107,9 +112,11 @@ def show_subpath(subpath):
 ```
 
 ### URL 构建
+
 > url_for() 函数用于
 
 ### HTTP 方法
+
 > Web 应用使用不同的 HTTP 方法处理 URL。缺省情况下，一个路由只回应 GET 请求
 
 ```python
@@ -126,11 +133,13 @@ def login():
 ### 静态文件
 
 创建 static 目录，将静态资源放在该目录中
+
 ```python
 url_for('static', filename='style.css')
 ```
 
 ### 渲染模板
+
 > 使用 render_template() 方法可以渲染模板，只需提供模板名称和作为参数的变量
 
 ```python
@@ -143,6 +152,7 @@ def hello(name=None):
 ```
 
 ### 请求对象
+
 > from flask import request
 
 ```python
@@ -161,6 +171,7 @@ def login():
 ```
 
 ### 文件上传
+
 > 表单中设置 enctype="multipart/form-data"
 
 ```python
@@ -172,12 +183,12 @@ def upload_file():
         f = request.files['the_file']
         f.save('/var/www/uploads/uploaded_file.txt')
     ...
-
 ```
 
 ### cookie
 
 读取 cookie
+
 ```python
 from flask import request
 
@@ -189,6 +200,7 @@ def index():
 ```
 
 存储 cookie
+
 ```python
 from flask import make_response
 
@@ -200,6 +212,7 @@ def index():
 ```
 
 ### 重定向和错误
+
 > 使用 redirect() 函数可以重定向，使用 abort() 可以更早退出请求，并返回错误码
 
 ```python
@@ -216,6 +229,7 @@ def login():
 ```
 
 自定义错误页面
+
 ```python
 @app.errorhandler(404)
 def page_not_found(error):
@@ -229,6 +243,5 @@ app.logger.debug('A value for debugging')
 app.logger.warning('A warning occurred (%d apples)', 42)
 app.logger.error('An error occurred')
 ```
-
 
 ...
