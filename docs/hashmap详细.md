@@ -1,4 +1,24 @@
 # HashMap详细
+
+- [HashMap详细](#hashmap详细)
+  - [一、HashMap基础](#一hashmap基础)
+    - [1.1 数组优缺点](#11-数组优缺点)
+    - [1.2 链表的优缺点](#12-链表的优缺点)
+    - [1.3 散列表](#13-散列表)
+    - [1.4 什么是哈希？特点是什么？](#14-什么是哈希特点是什么)
+  - [二、HashMap原理讲解](#二hashmap原理讲解)
+    - [2.1 HashMap的继承体系](#21-hashmap的继承体系)
+    - [2.2 Node数据结构分析](#22-node数据结构分析)
+    - [2.3 底层存储结构介绍](#23-底层存储结构介绍)
+    - [2.4 put数据原理分析](#24-put数据原理分析)
+    - [2.5 HashMap在JDK 8中为什么引入红黑树](#25-hashmap在jdk-8中为什么引入红黑树)
+    - [2.6 HashMap扩容原理](#26-hashmap扩容原理)
+    - [2.7 HashMap构造方法源码分析](#27-hashmap构造方法源码分析)
+    - [2.8 HashMap put方法源码分析](#28-hashmap-put方法源码分析)
+    - [2.9 HashMap resize扩容方法源码分析](#29-hashmap-resize扩容方法源码分析)
+    - [2.10 HashMa get方法](#210-hashma-get方法)
+    - [2.11 HashMap remove方法](#211-hashmap-remove方法)
+
 ---
 
 [原文地址](https://blog.csdn.net/m0_46494737/article/details/114499465)

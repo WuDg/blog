@@ -1,4 +1,19 @@
 # kubernetes
+
+- [kubernetes](#kubernetes)
+  - [JD](#jd)
+    - [云原生架构师 30-45K·13薪](#云原生架构师-30-45k13薪)
+  - [一、概念](#一概念)
+    - [1.1. 概述](#11-概述)
+    - [1.1.1. 时光回溯](#111-时光回溯)
+    - [1.1.2. kubernetes 能做什么：](#112-kubernetes-能做什么)
+    - [1.1.3. kubernetes 不是什么](#113-kubernetes-不是什么)
+    - [1.1.4. kubernetes 组件](#114-kubernetes-组件)
+    - [1.1.5. Node 组件](#115-node-组件)
+    - [1.1.6. 插件（Addons）](#116-插件addons)
+    - [1.1.6. kubernetes API](#116-kubernetes-api)
+    - [1.1.7. kubernetes 对象](#117-kubernetes-对象)
+
 > kubernetes 是一个开源的容器编排引擎，用来对容器化应用进行自动化部署、扩缩和管理。
 
 ## JD
@@ -143,5 +158,67 @@
 > kubernetes API 使我们可以查询和操纵 kubernetes API 中对象（如 Pod、Namespace、ConfigMap 和 Event）的状态
 > 大部分操作都可以通过 kubectl 命令行接口或类似 kubeadm 这类命令行工具来执行，这些工具在背后也是调用 API
 
-### 1.1.7. OpenAPI 规范
+**OpenAPI 规范**
 > kubernetes API 服务器通过 /openapi/v2 末端提供 OpenAPI 规范
+> kubernetes 为 API 实现了一种基于 Protobuf 的序列化格式，主要用于集群内部通信
+
+https://kubernetes.io/zh/docs/concepts/overview/kubernetes-api/
+
+### 1.1.7. kubernetes 对象
+> 说明 kubernetes 对象在 kubernetes API 中如何表示，以及如何在 .yaml 格式的文件中表示
+
+**理解 kubernetes 对象**
+> 在 kubernetes 系统中， kubernetes 对象是持久化的实体。kubernetes 适用这些实体去表示整个集群的状态。描述以下信息：
+> * 那些容器应用在运行
+> 可以被应用使用的资源
+> 关于应用运行时表现的策略，比如重启策略、升级策略，以及容错策略
+
+kubernetes 对象是"目标性记录",--一旦创建对象，kubernetes 系统将持续工作以确保对象存在。通过创建对象，本质上是告知kubernetes系统，所需要的集群工作负载看起来是什么样子的，这就是kubernetes集群的 `期待状态`（Desired State）
+操作kubernetes对象--无论是创建、修改、或者删除--需要使用kubernetes API。如，当使用 `kubectl` 命令行接口时，CLI 会执行必要的kubernetes API调用，也可以在程序中使用客户端库直接调用 kubernetes API
+
+**对象规约（Spec）与状态（Status）**
+> 每个 kubernetes 对象包含两个嵌套的对象字段，它们负责管理对象的配置：对象 spec（规约）和对象 statue（状态）。对于具有 spec 的对象，必须在创建对象时设置其内容，描述我们希望对象所具有的特征：期望状态
+
+**描述kubernetes对象**
+> 创建kubernetes对象时，必须提供对象的规约，用于描述该对象的期待状态，以及关于对象的一些基本信息（如名称）。当使用kubernetes API创建对象时（或者直接创建，或者基于kubectl），API请求必须在请求体中包含JSON格式的信息。大多数情况下，需要在.yaml文件中为 kubectl 体哦国内这些信息。kubectl 在发起API请求时，将这些信息转换成JSON格式
+
+下面 .yaml 示例，展示了 kubernetes Deployment 必须字段和对象规约：
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+
+```
+使用类似于上面的 .yaml 文件来创建 Deployment 的一种方式是使用 kubectl 命令行接口（CLI）中的 `kubectl apply`命令,将 .yaml 文件作为参数，下面是一个示例：
+
+```shell
+kubectl apply -f https://k8s.io/examples/application/deployment.yaml --record
+```
+
+输出：
+```shell
+deployment.apps/nginx-deployment created
+```
+**必须字段**
+* apiVersion：创建该对象所使用 kubernetes API版本
+* kind：对象类别
+* metadata：帮助唯一性标识对象的一些数据，包括一个 name 字符串、UID和可选的 namespace
+* spec：期望该对象的状态

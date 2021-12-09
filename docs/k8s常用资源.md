@@ -1,5 +1,25 @@
 # 私有化部署
 
+- [私有化部署](#私有化部署)
+  - [一、mysql-私有化部署](#一mysql-私有化部署)
+    - [1. mysql-deployment](#1-mysql-deployment)
+    - [2. mysql-service](#2-mysql-service)
+    - [3. mysql-pvc](#3-mysql-pvc)
+    - [4. mysql-pv](#4-mysql-pv)
+    - [5. mysql-pvc-deployment](#5-mysql-pvc-deployment)
+    - [6. mysql-configmap](#6-mysql-configmap)
+    - [7. mysql-configmap-deployment](#7-mysql-configmap-deployment)
+    - [8. mysql-secret](#8-mysql-secret)
+    - [9. 探针](#9-探针)
+  - [二、常用命令](#二常用命令)
+    - [删除资源](#删除资源)
+    - [启动资源](#启动资源)
+      - [其他命令](#其他命令)
+    - [10. springboot](#10-springboot)
+  - [三、springboot 项目私有化部署：](#三springboot-项目私有化部署)
+    - [1. 部署流程](#1-部署流程)
+    - [2. mysql-deployment.yaml](#2-mysql-deploymentyaml)
+
 参考文档路径: https://segmentfault.com/a/1190000014966962
 
 kubectl 常用命令总结 https://www.cnblogs.com/klvchen/p/9585746.html

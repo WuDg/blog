@@ -1,4 +1,23 @@
 # MySQL explain
+
+- [MySQL explain](#mysql-explain)
+  - [explain作用](#explain作用)
+  - [explain的执行效果](#explain的执行效果)
+  - [explain包含的字段](#explain包含的字段)
+  - [详细内容](#详细内容)
+    - [id字段](#id字段)
+    - [select_type字段](#select_type字段)
+    - [type字段](#type字段)
+    - [table字段](#table字段)
+    - [possible_keys字段](#possible_keys字段)
+    - [key字段](#key字段)
+    - [key_len字段](#key_len字段)
+    - [ref字段](#ref字段)
+    - [row字段](#row字段)
+    - [partitions字段](#partitions字段)
+    - [filtered字段](#filtered字段)
+    - [Extra字段](#extra字段)
+
 ---
 
 > explain关键字可以模拟MySQL优化器执行SQL语句，可以很好地分析SQL语句或表结构的性能瓶颈

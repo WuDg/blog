@@ -1,4 +1,14 @@
 # Github 图床搭建
+
+- [Github 图床搭建](#github-图床搭建)
+  - [一 github 存储](#一-github-存储)
+  - [二 jsDelivr](#二-jsdelivr)
+  - [三 PicGo](#三-picgo)
+  - [四 搭建](#四-搭建)
+    - [4.1 github](#41-github)
+    - [4.2 配置 PicGo](#42-配置-picgo)
+  - [五 总结](#五-总结)
+
 ---
 
 > 图床:一般是指储存图片的服务器
