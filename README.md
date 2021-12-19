@@ -37,6 +37,7 @@
 * [JavaSE总结](docs/JavaSE总结.md)
 * [HashMap详细](docs/HashMap详细.md)
 * [mysql-锁](docs/mysql.md)
+* [kubectl命令](docs/kubectl命令.md)
 * [spring-score](docs/spring-core.md)
 * [好用工具](docs/tools.md)
 * [pages-action](docs/pages-action.md)
