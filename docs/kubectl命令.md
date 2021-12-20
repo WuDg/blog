@@ -1,10 +1,21 @@
 # kubectl命令
-[原文Github地址](https://github.com/0voice/learning_mind_map)
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/kubernetes.jpg)
+```describe
+作者： 吴第广
+日期： 2021年12月20日
+```
+
+kubectl是操作k8s集群的命令行工具，安装在k8s的master节点。
+
+kubectl在$HOME/.kube目录中查找一个名为config的文件, 可以通过设置Kubeconfig环境变量或设置--kubeconfig来指定其他的kubeconfig文件。
+
+kubectl通过与apiserver交互可以实现对k8s集群中各种资源的增删改查。
+
+
+![kubernetes](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/kubernetes.jpg)
+
 
 ## 一、命令格式
-
 `kubectl [command] [type] [name] [flags]`
 
 ## 二、常用命令
@@ -105,5 +116,12 @@
 11. `plugin` 运行一个命令行插件
 12. `version` 打印客户端和服务版本信息
 
+## 八、原图
+![Kubetcl命令](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/Kubetcl命令-1.jpg)
 
+`原文:`
+* [learning_mind_map](https://github.com/0voice/learning_mind_map)
 
+`本文收录于:`
+* [Github仓库:wudg/blog](https://github.com/wudg/blog)
+* [Gitee仓库:wudg/blog](https://githee.com/wudg/blog)
