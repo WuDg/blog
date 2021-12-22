@@ -34,7 +34,7 @@
 * [ruby](docs/ruby.md)
 * [react](docs/react.md)
 * [kubernetes](docs/kubernetes.md)
-* [kubernetes-网络](docs/kubernetes-网络.md)
+* [kubernetes-网络](docs/kubernetes-network.md)
 * [github 图床搭建](docs/github图床搭建.md)
 * [JavaSE总结](docs/JavaSE总结.md)
 * [HashMap详细](docs/HashMap详细.md)
