@@ -23,7 +23,7 @@
 
 `Pod` 网络构建于 `Node` 节点网络之上
 
-### 1.1 同一节点间的Pod网络
+### 1.1 同一节点间的 `Pod` 网络
 > 一个 `Pod` 中可以存在多个容器，这些容器共享 `Pod` 的网络栈和其他资源，如 `Volume`
 
 什么是共享网络栈？同一节点上的Pod之间如何寻址和通信？
@@ -43,15 +43,15 @@
 
 `Pod1`中还有一个比较特殊的容器`pause`，这个容器运行的唯一的目的是为Pod建立共享的`veth0`网络接口，
 
-`Pod` 的IP是由`docker0`网桥分配的，如上图`docker0`网桥IP是`172.17.0.1`,此时，如果再启动其他`Pod`，由于这些Pods都连在同一个网桥上，即再同一个网段内，因此 `Pod` 间可以进行IP寻址和通信，如下图：
+`Pod` 的IP是由`docker0`网桥分配的，如上图`docker0`网桥IP是`172.17.0.1`,此时，如果再启动其他`Pod`，由于这些 `Pods` 都连在同一个网桥上，即再同一个网段内，因此 `Pod` 间可以进行 IP 寻址和通信，如下图：
 
 ![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/pod-network-between.png)
 
-从上图得，节点内Pod网络在`172.17.0.0/24`这个地址空间内，而节点主机在`10.100.0.0/24`地址空间内，即 `Pod` 网络和节点网络在不同网络中
+从上图得，节点内Pod网络在 `172.17.0.0/24` 这个地址空间内，而节点主机在 `10.100.0.0/24` 地址空间内，即 `Pod` 网络和节点网络在不同网络中
 
 ### 1.2 不同节点间Pod网络
 
-假设我们有两个节点主机，host1(10.100.0.2)和 host2(10.100.0.3)，它们都在`10.100.0.0/24`这个地址空间内。
+假设我们有两个节点主机，host1(10.100.0.2)和 host2(10.100.0.3)，它们都在 `10.100.0.0/24` 这个地址空间内。
 
 `Pod网络的地址是由k8s统一管理和分配的，保证集群内Pod的IP地址唯一`
 
@@ -65,7 +65,7 @@
 2. 覆盖（`Overlay`）：在现有网络上建立一个虚拟网络，实现技术包括：`flannel`、`weavenet`等。简单理解就是类似 `TCP` 5 层或 7 层协议栈，出节点前，对数据包进行封装，到达目标节点后，数据包解封，再转发给节点内部 `Pod` 网络
 
 ### 1.3 CNI
-> 为了简化 `Pod` 网络集成，`k8s` 支持 `CNI(Container Network Interface)`标准，不同的 `Pod` 网络技术可以通过CNI插件形式和 `k8s`进行集成。
+> 为了简化 `Pod` 网络集成，`k8s` 支持 `CNI(Container Network Interface)`标准，不同的 `Pod` 网络技术可以通过CNI插件形式和 `k8s` 进行集成。
 
 ![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/pod-network-cni.png)
 
@@ -81,8 +81,8 @@ Pod 网络存在的前提下，下图是 `Service` 网络的简化概念模型
 
 ![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/service-netword-model.png)
 
-k8s通过引入一层`Account-Service`来实现下面的功能
-* 服务发现：`Client Pod`发现并定位`Account-App`集群中的`Pod IP`。`Account-Service`提供统一的`ClusterIP`，`Client`通过`ClusterIP`就可以访问`Account-App`集群中的`Pod`，这里的`ClusterIP`是虚拟IP
+k8s通过引入一层 `Account-Service` 来实现下面的功能
+* 服务发现：`Client Pod` 发现并定位 `Account-App` 集群中的 `Pod IP`。`Account-Service`提供统一的`ClusterIP`，`Client`通过`ClusterIP` 就可以访问 `Account-App` 集群中的 `Pod`，这里的 `ClusterIP` 是虚拟IP
 * 负载均衡：`Client Pod` 以负载均衡策略去访问`Account-App`集群中不同的Pod实例。默认使用 `RoundRobin`
 
 ### 2.1 服务发现技术
@@ -150,7 +150,7 @@ Service Registry + DNS
 
 实际上是由节点网络可以直接对外暴露，具体的暴露方式看数据中心或公有云的底层网络部署
 
-**Kube-proxy：** 掌握 `Service`网络的所有信息，可以和Service网络以及Pod网络通信，同事又可以和节点网络打通
+**Kube-Proxy：** 掌握 `Service`网络的所有信息，可以和 `Service` 网络以及 `Pod` 网络通信，同事又可以和节点网络打通
 
 **NodePort：** 通过 `Kube-Proxy` 在节点上暴露一个监听端口，将 `k8s` 内部服务通过 `Kube-Proxy` 暴露出去的方式，就叫 `NodePort`(端口暴露在节点)
 
