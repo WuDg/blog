@@ -41,7 +41,7 @@ Kubernetes 主要由以下几个核心组件组成：
 
 ## 核心原理
 
-### 架构原理
+**架构原理**
 
 ![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/components.png)
 
@@ -54,7 +54,7 @@ Kubernetes 主要由以下几个核心组件组成：
 * Federation 提供跨可用区的集群
 * Fluentd-elasticsearch 提供集群日志采集、存储与查询
 
-**分层架构**
+**分层架构（架构原理）**
 
 ![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/14937095836427.jpg)
 
@@ -67,19 +67,19 @@ Kubernetes 主要由以下几个核心组件组成：
   * 内部：CRI、CNI、CVI、镜像仓库、Cloud Provider、集群自身的配置和管理
 
 
-**核心组件**
+**核心组件（架构原理）**
 
 ![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/core-packages.png)
 
-**核心 API**
+**核心 API（架构原理）**
 
 ![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/core-apis.png)
 
-**生态系统**
+**生态系统（架构原理）**
 
 ![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/core-ecosystem.png)
 
-### 核心组件（通信）
+**核心组件（通信）**
 
 ![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/components1.png)
 
@@ -562,7 +562,7 @@ k8s 的设计定位是单一集群在同一地域内
 
 略
 
-### kubeadm 工作原理
+### kubeadm
 
 kubeadm 是 k8s 主推的部署工具之一
 
