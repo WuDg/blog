@@ -19,7 +19,7 @@
 * [ruby](docs/ruby.md)
 * [react](docs/react.md) 
 * [kubernetes](docs/kubernetes.md)
-* [kubernetes_simple_version](docs/kubernetes_simple_version.md)
+* [Kubernetes 简洁版](docs/kubernetes_simple_version.md)
 * [kubernetes-网络](docs/kubernetes_network.md)
 * [github 图床搭建](docs/github_drawing_bed_construction.md)
 * [JavaSE总结](docs/javase_summary.md)
