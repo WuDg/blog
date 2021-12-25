@@ -508,4 +508,286 @@ CIR 将 kubelet 与容器运行时解耦，将原来完全面向 Pod 级别的�
 * 在集群外可以借助 `kubectl proxy&`：`curl http://localhost:8001/api/v1/proxy/nodes/<node-name>:10255/stats/summary
 `
 
+### kubectl-proxy
 
+每个节点都运行一个 kube-proxy，它监听 API Server 中的 service 和 endpoint 的变化情况，并通过 iptables 等来为服务配置负载均衡（TCP/UDP）
+
+kube-proxy 可以直接运行在物理机，也可也以 static pod 或者 daemnoSet 方式运行
+
+kube-pryx 目前支持以下几种实现：
+
+* userspace：最早的负载均衡方案，它在用户空间监听一个端口，所有服务通过 iptables 转发到这个端口，然后在其内部负载均衡到实际的 Pod。效率低，有明显性能瓶颈
+* iptables：目前推荐的方案，完全以 iptables 规则方式实现 service 负载均衡。存在当服务多的时候产生太多的 iptables 规则，更新时存在一定时延，存在性能问题
+* ipvs：为解决 iptables 模型性能问题，采用增量式更新，保证 service 更新期间连接保持不断
+* winuserspace：同 userspace，但仅工作在 windows 节点
+
+`注意:`使用 ipvs 模式时，需要预先在每台 Node 上加载内核模块：`nf_conntrack_ipv4`、`ip_vs`、`ip_vs_rr`、`ip_vs_wrr`、`ip_vs_sh` 等
+
+```shell
+# load module <module_name>
+modprobe -- ip_vs
+modprobe -- ip_vs_rr
+modprobe -- ip_vs_wrr
+modprobe -- ip_vs_sh
+modprobe -- nf_conntrack_ipv4
+# to check loaded modules, use
+lsmod | grep -e ip_vs -e nf_conntrack_ipv4
+# or
+cut -f1 -d " "  /proc/modules | grep -e ip_vs -e nf_conntrack_ipv4
+```
+
+
+**Iptables 示例**
+
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/iptables-mode.png)
+
+**ipvs 示例**
+
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/ipvs-mode.png)
+
+**kube-proxy 工作原理**
+
+kube-proxy 监听 API Server 中的 service 和 endpoint 的变化情况，并通过 userspace、iptables、ipvs 或 winuserspace 等 proxier 来为服务配置负载均衡
+
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/kube-proxy.png)
+
+**kube-proxy 不足**
+
+kube-proxy 目前只支持 TCP 和 UDP，不支持 HTTP 路由，并且没有健康检查机制。这些可以通过自定义 Ingress Controller 的方法来解决
+
+### Federation
+
+k8s 的设计定位是单一集群在同一地域内
+集群联邦，为了提供跨区、跨服务商 k8s 集群服务而设计的
+
+略
+
+### kubeadm 工作原理
+
+kubeadm 是 k8s 主推的部署工具之一
+
+**参考文档**
+
+[书栈网](https://www.bookstack.cn/read/feiskyer-kubernetes-handbook-202005/components-kubeadm.md)
+[官网](https://kubernetes.io/docs/reference/setup-tools/kubeadm/)
+
+略
+
+### hyperkube
+
+hyperkube 是 k8s 的 all-in-one 二进制包，可以用来启动多种 k8s 服务
+
+hyperkube支持的子命令包括
+
+* kubelet
+* apiserver
+* controller-manager
+* federation-apiserver
+* federation-controller-manager
+* kubectl
+* proxy
+* scheduler
+
+### kubectl
+
+kubectl 是 k8s 的命令行工具，是 k8s 用户和管理员必备的管理工具
+
+kubectl 提供了大量的子命令，方便管理 k8s 集群
+
+* `kubectl -h` 查看子命令列表
+* `kubectl options` 查看全局选项
+* `kubectl <command> --help` 查看子命令的帮助
+* `kubectl [command] [PARAMS] -o=<format>` 设置输出格式（如 json、yaml、jsonpath 等）
+* `kubectl explain [RESOURCE]` 查看资源的定义
+
+**配置**
+
+配置 k8s 集群以及认证方式，包括：
+
+* cluster 信息：k8s server 地址
+* 用户信息：用户名、密码或密钥
+* Context：cluster、用户信息以及 NameSpace 等
+
+```shell
+kubectl config set-credentials myself --username=admin --password=secret
+kubectl config set-cluster local-server --server=http://localhost:8080
+kubectl config set-context default-context --cluster=local-server --user=myself --namespace=default
+kubectl config use-context default-context
+kubectl config view
+```
+
+**常用命令**
+
+* 创建：`kubectl run <name> --image=<image>` 或者 `kubectl create -f manifest.yaml`
+* 查询：`kubectl get` <resource>
+* 更新 `kubectl set` 或者 `kubectl patch`
+* 删除：`kubectl delete <resource> <name>` 或者 `kubectl delete -f manifest.yaml`
+* 查询 Pod IP：`kubectl get pod <pod-name> -o jsonpath='{.status.podIP}'`
+* 容器内执行命令：`kubectl exec -ti <pod-name> sh`
+* 容器日志：`kubectl logs [-f] <pod-name>`
+* 导出服务：`kubectl expose deploy <name> --port=80`
+* Base64 解码：`kubectl get secret SECRET -o go-template='{{ .data.KEY | base64decode }}'`
+
+注意，`kubectl run` 仅支持 `Pod、Replication Controller、Deployment、Job` 和 `CronJob` 等几种资源。具体的资源类型是由参数决定的，默认为 `Deployment`
+
+**命令自动补全**
+
+Linux 
+
+```shell
+source /usr/share/bash-completion/bash_completion
+source <(kubectl completion bash)
+```
+
+MacOs
+
+```shell
+source <(kubectl completion zsh)
+```
+
+**自定义输出列**
+
+**日志查看**
+
+```shell
+# Return snapshot logs from pod nginx with only one container
+kubectl logs nginx
+# Return snapshot of previous terminated ruby container logs from pod web-1
+kubectl logs -p -c ruby web-1
+# Begin streaming the logs of the ruby container in pod web-1
+kubectl logs -f -c ruby web-1
+```
+
+**连接到一个正在运行的容器**
+
+```shell
+  # Get output from running pod 123456-7890, using the first container by default
+  kubectl attach 123456-7890
+  # Get output from ruby-container from pod 123456-7890
+  kubectl attach 123456-7890 -c ruby-container
+  # Switch to raw terminal mode, sends stdin to 'bash' in ruby-container from pod 123456-7890
+  # and sends stdout/stderr from 'bash' back to the client
+  kubectl attach 123456-7890 -c ruby-container -i -t
+Options:
+  -c, --container='': Container name. If omitted, the first container in the pod will be chosen
+  -i, --stdin=false: Pass stdin to the container
+  -t, --tty=false: Stdin is a TTY
+```
+
+**在容器内部执行命令**
+
+```shell
+  # Get output from running 'date' from pod 123456-7890, using the first container by default
+  kubectl exec 123456-7890 date
+  # Get output from running 'date' in ruby-container from pod 123456-7890
+  kubectl exec 123456-7890 -c ruby-container date
+  # Switch to raw terminal mode, sends stdin to 'bash' in ruby-container from pod 123456-7890
+  # and sends stdout/stderr from 'bash' back to the client
+  kubectl exec 123456-7890 -c ruby-container -i -t -- bash -il
+Options:
+  -c, --container='': Container name. If omitted, the first container in the pod will be chosen
+  -p, --pod='': Pod name
+  -i, --stdin=false: Pass stdin to the container
+  -t, --tty=false: Stdin is a TT
+```
+
+**端口转发**
+
+`kubectl port-forward` 用于将本地端口转发到指定的 Pod
+
+```shell
+# Listen on ports 5000 and 6000 locally, forwarding data to/from ports 5000 and 6000 in the pod
+kubectl port-forward mypod 5000 6000
+# Listen on port 8888 locally, forwarding to 5000 in the pod
+kubectl port-forward mypod 8888:5000
+# Listen on a random port locally, forwarding to 5000 in the pod
+kubectl port-forward mypod :5000
+# Listen on a random port locally, forwarding to 5000 in the pod
+kubectl port-forward mypod 0:5000
+```
+
+也可以将本地端口转发到服务、rs 等
+
+```shell
+# Forward to deployment
+kubectl port-forward deployment/redis-master 6379:6379
+# Forward to replicaSet
+kubectl port-forward rs/redis-master 6379:6379
+# Forward to service
+kubectl port-forward svc/redis-master 6379:6379
+```
+
+**API Server 代理**
+
+`kubectl proxy` 命令提供了一个 k8s API 服务的 HTTP 代理
+
+```shell
+$ kubectl proxy --port=8080
+Starting to serve on 127.0.0.1:8080
+```
+
+可以通过代理地址 `http://localhost:8080/api/` 来直接访问 k8s API，比如查询 Pod 列表
+
+```shell
+curl http://localhost:8080/api/v1/namespaces/default/pods
+
+```
+
+**文件拷贝**
+
+`kubectl cp` 支持从容器和节点双向拷贝
+
+```shell
+  # Copy /tmp/foo_dir local directory to /tmp/bar_dir in a remote pod in the default namespace
+  kubectl cp /tmp/foo_dir <some-pod>:/tmp/bar_dir
+  # Copy /tmp/foo local file to /tmp/bar in a remote pod in a specific container
+  kubectl cp /tmp/foo <some-pod>:/tmp/bar -c <specific-container>
+  # Copy /tmp/foo local file to /tmp/bar in a remote pod in namespace <some-namespace>
+  kubectl cp /tmp/foo <some-namespace>/<some-pod>:/tmp/bar
+  # Copy /tmp/foo from a remote pod to /tmp/bar locally
+  kubectl cp <some-namespace>/<some-pod>:/tmp/foo /tmp/bar
+Options:
+  -c, --container='': Container name. If omitted, the first container in the pod will be chosen
+```
+
+`注意：文件拷贝依赖于 tar 命令，所以容器中需要能够执行 tar 命令`
+
+**权限检查**
+
+**查看事件**
+
+```shell
+# 查看所有事件
+kubectl get events --all-namespaces
+# 查看名为nginx对象的事件
+kubectl get events --field-selector involvedObject.name=nginx,involvedObject.namespace=default
+# 查看名为nginx的服务事件
+kubectl get events --field-selector involvedObject.name=nginx,involvedObject.namespace=default,involvedObject.kind=Service
+# 查看Pod的事件
+kubectl get events --field-selector involvedObject.name=nginx-85cb5867f-bs7pn,involvedObject.kind=Pod
+```
+
+**插件**
+
+**原始 URL**
+
+kubectl 可以用来直接访问 API Server 的 REST API
+
+```shell
+kubectl get --raw /apis/metrics.k8s.io/v1beta1/nodes
+```
+
+`附录`
+
+kubectl 安装方式
+
+```shell
+# OS X
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl
+# Linux
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+# Windows
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/windows/amd64/kubectl.exe
+```
+
+## 资源对象
