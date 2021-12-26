@@ -791,3 +791,1323 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s htt
 ```
 
 ## 资源对象
+
+### ConfigMap
+
+应用程序的运行可能依赖一些配置，而这些配置可能会经常变动，如果我们应用程序架构不是应用和配置分离，那么就会存在当我们去修改某些配置项属性时需要重新构建镜像文件
+
+ConfigMap 帮助我们实现应用和配置分离
+
+ConfigMap 可以保存 k -v 对，也可也保存整个配置文件
+
+**ConfigMap 创建**
+
+使用 `kubectl create configmap` 从文件、目录或者 k-v 字符串创建 ConfigMap，也可也通过 `kubectl apply -f file` 创建
+
+从 k-v 字符串创建
+
+```shell
+$ kubectl create configmap special-config --from-literal=special.how=very
+configmap "special-config" created
+$ kubectl get configmap special-config -o go-template='{{.data}}'
+map[special.how:very]
+```
+
+从 env 文件中创建
+
+```shell
+$ echo -e "a=b\nc=d" | tee config.env
+a=b
+c=d
+$ kubectl create configmap special-config --from-env-file=config.env
+configmap "special-config" created
+$ kubectl get configmap special-config -o go-template='{{.data}}'
+map[a:b c:d]
+```
+
+从目录创建
+
+```shell
+
+$ mkdir config
+$ echo a>config/a
+$ echo b>config/b
+$ kubectl create configmap special-config --from-file=config/
+configmap "special-config" created
+$ kubectl get configmap special-config -o go-template='{{.data}}'
+map[a:a
+ b:b
+]
+```
+
+从文件 Yaml/Json 创建
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: special-config
+  namespace: default
+data:
+  special.how: very
+  special.type: charm
+```
+
+```shell
+$ kubectl create  -f  config.yaml
+configmap "special-config" created
+```
+
+**ConfigMap 使用**
+
+通过三种方式在 Pod 中使用
+
+1. 设置环境变量
+2. 设置容器命令行参数
+3. 在 Volume 中直接挂载文件或目录
+
+首先创建 ConfigMap
+
+```shell
+kubectl create configmap special-config --from-literal=special.how=very --from-literal=special.type=charm
+kubectl create configmap env-config --from-literal=log_level=INFO
+```
+
+用作环境变量
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+spec:
+  containers:
+    - name: test-container
+      image: gcr.io/google_containers/busybox
+      command: ["/bin/sh", "-c", "env"]
+      env:
+        - name: SPECIAL_LEVEL_KEY
+          # 使用configmap
+          valueFrom:
+            configMapKeyRef:
+              name: special-config
+              key: special.how
+        - name: SPECIAL_TYPE_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: special-config
+              key: special.type
+      envFrom:
+        - configMapRef:
+            name: env-config
+  restartPolicy: Never
+```
+
+用作命令行参数（先将 ConfigMap 的数据保存在环境变量中，再通过 `$(VAR_NAME)` 方式引用） 
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-test-pod
+spec:
+  containers:
+    - name: test-container
+      image: gcr.io/google_containers/busybox
+      command: ["/bin/sh", "-c", "echo $(SPECIAL_LEVEL_KEY) $(SPECIAL_TYPE_KEY)" ]
+      env:
+        - name: SPECIAL_LEVEL_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: special-config
+              key: special.how
+        - name: SPECIAL_TYPE_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: special-config
+              key: special.type
+  restartPolicy: Never
+```
+
+使用 Volume 将 ConfigMap 作为文件或目录直接挂载（直接挂载至 Pod 的 /etc/config 目录下，每个 k-v 都会生成一个文件，key 为文件名，value 为内容）
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vol-test-pod
+spec:
+  containers:
+    - name: test-container
+      image: gcr.io/google_containers/busybox
+      command: ["/bin/sh", "-c", "cat /etc/config/special.how"]
+      volumeMounts:
+      - name: config-volume
+        mountPath: /etc/config
+  volumes:
+    - name: config-volume
+      configMap:
+        name: special-config
+  restartPolicy: Never
+```
+
+### CronJob
+
+定时任务，类似于 Linux 的 crontab，再指定事件周期运行指定任务
+
+**CronJob Spec**
+
+* `spec.schedule`：指定任务运行周期，格式同 `Cron`
+* `spec.jobTemplate`：指定需要运行的任务，格式同 `Job`
+* `spec.startingDeadlineSeconds`：指定任务开始的截至期限
+* `spec.concurrencyPolicy`：指定任务的并发策略，支持 Allow、Forbid和 Replace
+
+```yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: hello
+            image: busybox
+            args:
+            - /bin/sh
+            - -c
+            - date; echo Hello from the Kubernetes cluster
+          restartPolicy: OnFailure
+```
+
+```shell
+$ kubectl create -f cronjob.yaml
+cronjob "hello" created
+```
+
+也可也使用 `kubectl run` 来创建一个 `CroJjob`
+
+```shell
+kubectl run hello --schedule="*/1 * * * *" --restart=OnFailure --image=busybox -- /bin/sh -c "date; echo Hello from the Kubernetes cluster"
+```
+
+```shell
+$ kubectl get cronjob
+NAME      SCHEDULE      SUSPEND   ACTIVE    LAST-SCHEDULE
+hello     */1 * * * *   False     0         <none>
+$ kubectl get jobs
+NAME               DESIRED   SUCCESSFUL   AGE
+hello-1202039034   1         1            49s
+$ pods=$(kubectl get pods --selector=job-name=hello-1202039034 --output=jsonpath={.items..metadata.name} -a)
+$ kubectl logs $pods
+Mon Aug 29 21:34:09 UTC 2016
+Hello from the Kubernetes cluster
+# 删除 cronjob 的时候会删除它创建的 job 和 pod，并停止正在创建的 job
+$ kubectl delete cronjob hello
+cronjob "hello" deleted
+```
+
+### DaemonSet
+
+DeamonSet 保证在每个 Node 上都运行一个容器副本，常用来部署一些集群的日志、监控或者其他系统管理应用
+
+如：
+
+* 日志收集：如 fluentd,logstash 等
+* 系统监控：比如 Prometheus Node Exporter,collectd,New Relic agent,Ganglia gmond 等
+* 系统程序：如 kube-proxy,kube-dns,glusterd,ceph 等
+
+使用 Fluentd 收集日志
+
+```yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd-elasticsearch
+  namespace: kube-system
+  labels:
+    k8s-app: fluentd-logging
+spec:
+  selector:
+    matchLabels:
+      name: fluentd-elasticsearch
+  template:
+    metadata:
+      labels:
+        name: fluentd-elasticsearch
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: fluentd-elasticsearch
+        image: gcr.io/google-containers/fluentd-elasticsearch:1.20
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: varlibdockercontainers
+        hostPath:
+          path: /var/lib/docker/containers
+```
+
+**指定 Node 节点**
+
+DaemondSet 会忽略 Node 的 unschedulable 状态
+
+**静态 Pod**
+
+除了 DaemonSet，还可以使用静态 Pod 来在每台机器上运行指定 Pod
+
+### Deployment
+
+Deployment 为 Pod 和 ReplicaSet 提供了一个声明式定义（declarative）方法，用来替代以前的 ReplicationController 来管理应用
+
+比如定义一个简单的 Nginx 应用
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
+```
+
+扩容：
+
+```shell
+kubectl scale deployment nginx-deployment --replicas 10
+```
+
+如果集群支持 horizontal pod autoscaling，还可以为 Deployment 设置自动扩展：
+
+```shell
+kubectl autoscale deployment nginx-deployment --min=10 --max=15 --cpu-percent=80
+```
+
+更新镜像：
+
+```shell
+kubectl set image deployment/nginx-deployment nginx=nginx:1.9.1
+```
+
+回滚：
+
+```shell
+kubectl rollout undo deployment/nginx-deployment
+```
+
+`Deployment 典型应用场景：`
+
+1. 定义 Deployment 创建 Pod 和 ReplicaSet
+2. 滚动升级和回滚引用
+3. 扩容和缩容
+4. 暂停和继续 Deployment
+
+`典型用例如下：`
+
+1. 使用 Deployment 创建 Replica Set，RS 在后台创建 Pod。检查是否启动成功
+2. 通过更新 Deployment 的 PodTemplateSpec 字段来声明 Pod 的新状态
+3. 如果当前状态不稳定，回滚到之前的 Deployment revision，每次回滚都会更新 Deployment 的 revision
+4. 扩容 Deployment 以满足更高的负载
+5. 暂停 Deployment 来应用 PodTemplateSpec 的多个修复，然后回复上线
+6. 根据 Deployment 的状态判断上线是否正常
+7. 清除旧的不必要的 ReplicaSet
+
+**其他内容**
+
+略
+
+### Ingress
+> 负载均衡、SSL 终止、HTTP 路由等
+
+通常 service 和 pod 的 IP 仅可在集群内部访问。集群外部的请求需要通过负载均衡转发到 service 在 Node 上暴露的 NodePort 上，然后再由 `kube-proxy` 通过边缘路由器（edge router）将其转发给相关的 Pod 或者丢弃
+
+Ingress 就是为进入集群的请求提供路由规则的集合，如下图所示：
+
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/image-20190316184154726.png)
+
+使用 Ingress 前，需要先部署一个 `Ingress Controller`，它监听 Ingress 和 Service 的变化，并根据规则配置负载均衡提供访问入口
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: test-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /testpath
+        backend:
+          serviceName: test
+          servicePort: 80
+```
+
+目前 k8s 仅支持 http 规则，上面示例中表示请求 `/testpath` 时转发到服务 `test` 的 80 端口中
+
+**Ingress 类型**
+
+单服务（没有任何规则的后端服务）
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: test-ingress
+spec:
+  backend:
+    serviceName: testsvc
+    servicePort: 80
+```
+
+多服务（路由到多服务的 Ingress）
+
+如：
+
+```
+foo.bar.com -> 178.91.123.132 -> / foo    s1:80
+                                 / bar    s2:80
+```
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: test
+spec:
+  rules:
+  - host: foo.bar.com
+    http:
+      paths:
+      - path: /foo
+        backend:
+          serviceName: s1
+          servicePort: 80
+      - path: /bar
+        backend:
+          serviceName: s2
+          servicePort: 80
+```
+
+虚拟主机 Ingress（根据不同名字转发到不同后端服务）
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: test
+spec:
+  rules:
+  - host: foo.bar.com
+    http:
+      paths:
+      - backend:
+          serviceName: s1
+          servicePort: 80
+  - host: bar.foo.com
+    http:
+      paths:
+      - backend:
+          serviceName: s2
+          servicePort: 80
+```
+
+更新 Ingress
+
+`kubectl edit ing name` 和 `kubectl replace -f new-ingress.yaml`
+
+**Ingress Controller**
+
+Ingress Controller 类型多样，需要用户选择合适自己集群的 Ingress Controller
+
+* kubernetes/ingress-nginx：Nginx
+* kubernetes/ingress-gcs：GCE
+
+
+### Job
+
+负责批量处理短暂的一次性任务
+
+**Job 类型**
+
+* 非并行 Job：通常创建一个 Pod 直到成功结束
+* 固定结束次数的 Job：设置 `.spec.completions`，创建多个 Pod，直到 `.spec.completions` 个 Pod 成功结束
+* 带有工作队列的并行 Job：设置 `.spec.Parallelism` 但不设置 `.spec.completions`，当所有 Pod 结束并且至少一个成功时，Job 就认为是成功
+
+根据 `.spec.completions` 和 `.spec.Parallelism` 的设置，可以将 Job 划分为以下几种 pattern：
+
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/job-patterns.png)
+
+**Job Controller**
+
+Job Controller 负责根据 Job Spec 创建 Pof，并持续监控 Pod 的状态，直至成功结束。如果失败，则根据 restartPolicy 决定是否创建新的 Pod 再次重试任务
+
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/job.png)
+
+简单示例：
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  template:
+    metadata:
+      name: pi
+    spec:
+      containers:
+      - name: pi
+        image: perl
+        command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+      restartPolicy: Never
+```
+
+### LocalVolume
+
+本地数据卷：代表本地存储设备，如磁盘、分区或者目录等
+
+应用场景：分布式存储和数据库等
+
+示例：
+
+创建 StorageClas
+
+```yaml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: local-storage
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+```
+
+创建 PV
+
+```yaml
+# For kubernetes v1.10
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: example-local-pv
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  local:
+    path: /mnt/disks/ssd1
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - example-node
+```
+
+创建 PVC
+
+```yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: example-local-claim
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: local-storage
+```
+
+创建 Pod，引用 PVC
+
+```yaml
+kind: Pod
+apiVersion: v1
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: nginx
+      volumeMounts:
+      - mountPath: "/var/www/html"
+        name: mypd
+  volumes:
+    - name: mypd
+      persistentVolumeClaim:
+        claimName: example-local-claim
+```
+
+### Namespace
+
+Namespace 是一组资源和对象的抽象集合，如可以用来将系统内部的对象划分为不同的项目组或用户组
+
+**查询**
+
+```shell
+kubectl get ns
+```
+
+**删除**
+
+```shell
+kubectl delete ns wudiguang
+```
+
+**注意**
+
+* 删除一个 ns 后会自动删除所有的该 ns 下的资源
+* `default` 和 `kube-system` 的 ns 不可删除
+* PV 不属于任何 ns，但 PVC 是属于特定 ns
+
+### NetworkPolicy
+
+提供基于策略的网络控制，隔离应用并减少攻击面
+
+略
+
+### Node
+
+Node 是 Pod 运行的主机，可以是物理机和虚拟机
+
+为了管理 Pod，每个 Node 节点至少要运行`容器运行时`、kubelet、kube-proxy
+
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/node.png)
+
+**Node 管理**
+
+由 Node Controller 完成
+
+* 维护 Node 状态
+* 与 Cloud Provider 同步 Node
+* 给 Node 分配容器
+* 删除带有 `NoExecute` taint 的 Node 上的 Pods
+
+**Node 的状态**
+
+* 地址：包括 hostname、外网 IP 和内网 IP
+* 条件：包括 OutOfDisk、Ready、MemoryPressure 和 DiskPressure
+* 容量：Node 上可用资源，包括 CPU、内存和 Pod 总数
+* 基本信息：包括内核版本、容器引擎版本、OS 类型
+
+**Node 维护**
+
+标志 Node 不可调度但不影响其上正在运行的 Pod
+
+```shell
+kubectl cordon $NODENAME
+```
+
+### PersistentVolume
+
+PV 和 PVC 提供了方便的持久化卷：PV 提供网络存储资源，而 PVC 请求存储资源。将 Pod 和数据卷解耦
+
+**Volume 生命周期**
+
+1. Provisioning：PV 创建，可以直接创建 PV，也可使用 StorageClass 动态创建
+2. Bindling：将 PV 分配给 PVC
+3. Using：Pod 通过 PVC 使用 Volume
+4. Releasing：Pod 释放 Volumne 并删除 PVC
+5. Reclaiming：回收 PV
+6. Deleting：删除 PV
+
+**Volume 状态**
+
+1. Avaiable：可用
+2. Bound：以及分配给 PVC
+3. Released：PVC 解绑但还未执行回收策略
+4. Failed：发生错误
+
+NFS 的 PV 定义：
+
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv0003
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
+  nfs:
+    path: /tmp
+    server: 172.17.0.2
+```
+
+PV 访问模式：
+  
+* ReadWriteOnce：可读可写，只支持被单个节点挂载
+* ReadOnlyMany：以只读的方式被多个节点挂载
+* ReadWriteMany：以读写的方式被多个节点共享
+
+PVC 绑定 PC 时通常根据两个条件来绑定：存储大小和访问模式
+
+**PV 回收策略**
+
+* Retain：不清理，保留 Volume
+* Recycle：删除数据，
+* Delete：删除存储资源
+
+**StorageClass**
+
+动态 PV
+
+**PVC**
+
+PV 时存储资源，而 PVC 是对 PV 的请求
+
+```yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: myclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: slow
+  selector:
+    matchLabels:
+      release: "stable"
+    matchExpressions:
+      - {key: environment, operator: In, values: [dev]}
+```
+
+PVC 可用直接挂载到 Pod：
+
+```yaml
+kind: Pod
+apiVersion: v1
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: dockerfile/nginx
+      volumeMounts:
+      - mountPath: "/var/www/html"
+        name: mypd
+  volumes:
+    - name: mypd
+      persistentVolumeClaim:
+        claimName: myclaim
+```
+
+**扩展 PV 空间**
+
+略
+
+**块存储**
+
+
+### Pod
+
+Pod 是一组紧密关联的容器集合，它们共享 IPC、Network 和 UTS namespace。是 k8s 调度的基本单位
+
+Pod 设计理念：支持多个容器在一个 Pod 中共享网络和文件系统，可用通过进程间通信和文件共享方式来高效完成合作
+
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/pod.png)
+
+**Pod 定义**
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+```
+
+**私有镜像**
+
+使用私有镜像时，需要创建一个 docker registry secret，并在容器中引用
+
+创建 docker registry secret
+
+```shell
+kubectl create secret docker-registry regsecret --docker-server=<your-registry-server> --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email>
+```
+
+第一种：直接引用 secret
+
+```yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: private-reg
+spec:
+  containers:
+    - name: private-reg-container
+      image: dregistry.azurecr.io/acr-auth-example
+  imagePullSecrets:
+    - name: acr-auth
+```
+
+第二种：把 secret 添加到 service account 中，再通过 service account 引用
+
+```shell
+$ kubectl get secrets myregistrykey
+$ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "myregistrykey"}]}'
+$ kubectl get serviceaccounts default -o yaml
+```
+
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  creationTimestamp: 2015-08-07T22:02:39Z
+  name: default
+  namespace: default
+  selfLink: /api/v1/namespaces/default/serviceaccounts/default
+  uid: 052fb0f4-3d50-11e5-b066-42010af0d7b6
+secrets:
+- name: default-token-uudge
+imagePullSecrets:
+- name: myregistrykey
+```
+
+**镜像拉取策略**
+
+* Always：总是去仓库拉取镜像。校验如果有变化则覆盖，否则不会覆盖
+* Never：只使用本地镜像
+* IfNotPresent：有则使用本地，无则去镜像仓库拉取
+
+**资源限制**
+
+通过 cgroups 限制容器的 CPU 和内存等资源，包括 request 和 limits 等
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: nginx
+  name: nginx
+spec:
+  containers:
+    - image: nginx
+      name: nginx
+      resources:
+        requests:
+          cpu: "300m"
+          memory: "56Mi"
+        limits:
+          cpu: "1"
+          memory: "128Mi"
+```
+
+**健康检查**
+
+为了保证容器再部署后确实处在正常运行状态
+
+**Init Container**
+
+常用于初始化配置
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-demo
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: workdir
+      mountPath: /usr/share/nginx/html
+  # These containers are run during pod initialization
+  initContainers:
+  - name: install
+    image: busybox
+    command:
+    - wget
+    - "-O"
+    - "/work-dir/index.html"
+    - http://kubernetes.io
+    volumeMounts:
+    - name: workdir
+      mountPath: "/work-dir"
+  dnsPolicy: Default
+  volumes:
+  - name: workdir
+    emptyDir: {}
+```
+
+**容器生命周期钩子**
+> 支持 `exec`、`httpGet`
+
+监听容器生命周期的特定事件，并在事件发生时执行已注册的回调函数
+
+postStart：容器创建后立即执行
+preStop：容器终止前执行，常用于资源清理
+
+**限制网络带宽**
+
+可以通过给 Pod 增加 `kubernetes.io/ingress-bandwidth` 和 `kubernetes.io/egress-bandwidth` 这两个 annotation 来限制 Pod 的网络带宽
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: qos
+  annotations:
+    kubernetes.io/ingress-bandwidth: 3M
+    kubernetes.io/egress-bandwidth: 4M
+spec:
+  containers:
+  - name: iperf3
+    image: networkstatic/iperf3
+    command:
+    - iperf3
+    - -s
+```
+
+**自定义 hosts**
+
+略
+
+**优先级**
+> PriorityClass
+
+**Pod 时区**
+
+### PodPreset
+
+用来给指定标签的 Pod 注入额外的信息，如环境变量、存储卷等
+
+```yaml
+kind: PodPreset
+apiVersion: settings.k8s.io/v1alpha1
+metadata:
+  name: allow-database
+  namespace: myns
+spec:
+  selector:
+    matchLabels:
+      role: frontend
+  env:
+    - name: DB_PORT
+      value: "6379"
+  volumeMounts:
+    - mountPath: /cache
+      name: cache-volume
+  volumes:
+    - name: cache-volume
+      emptyDir: {}
+```
+
+### ReplicaSet/ReplicaController
+
+用来确保容器应用的复本数始终保持在用户定义的副本数
+
+确保健康 Pod 的数量、弹性伸缩、滚动升级以及应用多版本发布跟踪
+
+建议使用 Deployment 来自动管理 ReplicaSet
+
+**ReplicaController 示例**
+
+```yaml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  selector:
+    app: nginx
+  template:
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+```
+
+**ReplicaSet 示例**
+```yaml
+apiVersion: extensions/v1beta1
+kind: ReplicaSet
+metadata:
+  name: frontend
+  # these labels can be applied automatically
+  # from the labels in the pod template if not set
+  # labels:
+    # app: guestbook
+    # tier: frontend
+spec:
+  # this replicas value is default
+  # modify it according to your case
+  replicas: 3
+  # selector can be applied automatically
+  # from the labels in the pod template if not set,
+  # but we are specifying the selector here to
+  # demonstrate its usage.
+  selector:
+    matchLabels:
+      tier: frontend
+    matchExpressions:
+      - {key: tier, operator: In, values: [frontend]}
+  template:
+    metadata:
+      labels:
+        app: guestbook
+        tier: frontend
+    spec:
+      containers:
+      - name: php-redis
+        image: gcr.io/google_samples/gb-frontend:v3
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+          # If your cluster config does not include a dns service, then to
+          # instead access environment variables to find service host
+          # info, comment out the 'value: dns' line above, and uncomment the
+          # line below.
+          # value: env
+        ports:
+        - containerPort: 80
+```
+
+### Resource Quotas
+
+`资源配额`用来限制用户资源用量的一种机制
+
+* 资源配额应用在 ns 上，并且每个 ns 最多只能有一个 ResourceQuotas 对象
+* 开启资源配额后，创建容器时必须配置 request 或 limits
+* 用户超额后进制创建新的资源
+
+**资源配额类型**
+
+* 计算资源：CPU 和 memory
+* 存储资源：存储资源总量以及指定 storage class 总量
+* 对象数：可创建的对象的个数
+
+### Secret
+
+解决了密码、token、密钥等敏感数据的配置问题，不需要把这些敏感数据暴露到镜像或者 Pod Spec 中
+
+**Secret 类型**
+
+1. Opaque：base64 编码格式的 Secret，用来存储密码、密钥等。加密性弱
+2. `kubernetes.io/dockerconfigjson`：用来存储私有 docker registry 的认证信息。
+3. `kubernetes.io/service-account-token`： 用于被 serviceaccount 引用。serviceaccout 创建时 Kubernetes 会默认创建对应的 secret。Pod 如果使用了 serviceaccount，对应的 secret 会自动挂载到 Pod 的 /run/secrets/kubernetes.io/serviceaccount 目录中。
+
+**Opaque Secret**
+
+key 和 value 都是 base64 格式
+
+```shell
+$ echo -n "admin" | base64
+YWRtaW4=
+$ echo -n "1f2d1e2e67df" | base64
+MWYyZDFlMmU2N2Rm
+```
+
+`secret.yml`
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+type: Opaque
+data:
+  password: MWYyZDFlMmU2N2Rm
+  username: YWRtaW4=
+```
+
+创建 `secret.yaml`
+
+```shell
+# kubectl get secret
+NAME                  TYPE                                  DATA      AGE
+default-token-cty7p   kubernetes.io/service-account-token   3         45d
+mysecret              Opaque                                2         7s
+```
+
+**使用 Opaque Secret**
+
+* 以 Volume 方式
+* 以环境变量方式
+
+将 Secret 挂载到 Volume 中
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: db
+  name: db
+spec:
+  volumes:
+  - name: secrets
+    secret:
+      secretName: mysecret
+  containers:
+  - image: gcr.io/my_project_id/pg:v1
+    name: db
+    volumeMounts:
+    - name: secrets
+      mountPath: "/etc/secrets"
+      readOnly: true
+    ports:
+    - name: cp
+      containerPort: 5432
+      hostPort: 5432
+```
+
+**Secret 和 Configmap 对比**
+
+相同点：
+
+* k-v 形式
+* 属于某个 ns
+* 可用导入到环境变量
+* 可用通过目录/文件形式挂载
+
+不同点：
+
+* Secret 可用被 ServiceAccount 关联使用
+* Secret 可用存储 registry 鉴权信息
+* Secret 支持 base64 加密
+* Secret 支持三种类型，ConfigMap 不区分类型
+* Secret 文件存储在 tmpfs 文件系统中，Pod 删除后 Secret 文件也会对应删除
+
+### SecuirityContent
+
+限制不可行容器行为，保护系统和其他容器不受其影响
+
+略
+
+### Service
+
+服务发现和负载均衡，并通过 kube-proxy 配置 cloud provider 来适应不同的应用场景。
+
+Service 是一组提供相同功能 Pod 的抽象，并提供一个统一的入口。通过标签选择服务后端，由 kube-proxy 负责将服务 IP 负载均衡到这些 Pod IP 中
+
+目前 k8s 负载均衡大致有以下几种机制：
+
+1. Service：直接使用 Service 提供的 cluster 内部的负载均衡，并借助 cloud provider 提供的 LB 提供外部访问
+2. Ingress Controller：还是用 Service 提供的 cluster 内部的负载均衡，但是通过自定义的 Ingress Controller 提供外部访问
+3. Service Load Balancer：把 load balancer 直接跑到容器中
+4. Custom Load Balancer：自定义负载均衡
+
+**Service 类型**
+
+* ClusterIP：默认，自动分配唯一的 cluster 内部虚拟 IP
+* NodePort：对外暴露 kube-proxy 服务
+* LoadBalancer：在 NodePort 基础上，借助 cloud provider 创建一个外部负载均衡器，并将请求转发到 <NodeIP>:NodePort
+* ExternalName：将服务通过 DNS CNAME 记录方式转发到指定域名
+
+**协议**
+
+Service、Endpoints、Pod 支持三种类型协议：
+
+* TCP：传输控制协议，安全
+* UDP：用户数据报协议
+* SCTP：流控制传输协议
+
+**工作原理**
+
+kube-proxy 负责将 service 负载均衡到 Pod 中
+
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/service-flow.png)
+
+### ServiceAccount
+
+为了方便 Pod 里面进程调用 k8s API 或其他外部服务而设计的
+
+**创建 Service Account**
+
+```shell
+$ kubectl create serviceaccount jenkins
+serviceaccount "jenkins" created
+$ kubectl get serviceaccounts jenkins -o yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  creationTimestamp: 2017-05-27T14:32:25Z
+  name: jenkins
+  namespace: default
+  resourceVersion: "45559"
+  selfLink: /api/v1/namespaces/default/serviceaccounts/jenkins
+  uid: 4d66eb4c-42e9-11e7-9860-ee7d8982865f
+secrets:
+- name: jenkins-token-l9v7v
+```
+
+自动创建的 secret：
+
+```shell
+kubectl get secret jenkins-token-l9v7v -o yaml
+```
+
+**添加 ImagePullSecrets**
+
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  creationTimestamp: 2015-08-07T22:02:39Z
+  name: default
+  namespace: default
+  selfLink: /api/v1/namespaces/default/serviceaccounts/default
+  uid: 052fb0f4-3d50-11e5-b066-42010af0d7b6
+secrets:
+- name: default-token-uudge
+imagePullSecrets:
+- name: myregistrykey
+```
+
+**授权**
+
+```yaml
+# This role allows to read pods in the namespace "default"
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1alpha1
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+  - apiGroups: [""] # The API group"" indicates the core API Group.
+    resources: ["pods"]
+    verbs: ["get", "watch", "list"]
+    nonResourceURLs: []
+---
+# This role binding allows "default" to read pods in the namespace "default"
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1alpha1
+metadata:
+  name: read-pods
+  namespace: default
+subjects:
+  - kind: ServiceAccount # May be "User", "Group" or "ServiceAccount"
+    name: default
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+```
+
+### StatefulSet
+
+为解决有状态服务问题
+
+应用场景：
+
+1. 稳定的持久化存储：即 Pod 重新调度后还是能访问到相同的持久化数据，基于 PVC 实现
+2. 稳定的网络标志：即 Pod 重新调度后其 PodName 和 HostName 不变，基于 Headless Service实现
+3. 有序部署：Pod 有序，基于 init containers 实现
+4. 有序收缩，有序删除
+
+**更新 StatefulSet**
+
+* OnDelete：更新时不立即删除旧的 Pod，等待用户手动删除后自动创建新 Pod
+* RollingUpdate：自动删除旧的 Pod 并创建新的 Pod
+
+**StatefulSet 注意事项**
+
+* 推荐在 Kubernetes v1.9 或以后的版本中使用
+* 所有 Pod 的 Volume 必须使用 PersistentVolume 或者是管理员事先创建好
+* 为了保证数据安全，删除 StatefulSet 时不会删除 Volume
+* StatefulSet 需要一个 Headless Service 来定义 DNS domain，需要在 StatefulSet 之前创建好
+
+### Volume
+
+k8s 存储卷
+
+解决容器数据持久化和容器间共享数据的问题
+
+* 容器挂掉后 kubelet 再次重启容器时，Volume 数据依然还在
+* Pod 删除时，Volume 才会清理。数据是否丢失取决于具体的 Volume 类型，emptyDir 数据会丢失，PV 则不会
+
+**Volume 类型**
+
+k8s 支持以下 Volume 类型
+
+* emptyDir：容器挂掉不会丢失数据，删除则会
+* hostPath：允许挂载 Node 上的文件系统到 Pod 里面
+* gcePersistentDisk：可用挂载 GCE 上的永久磁盘到容器，需要 k8s 运行在 GCE 的 VM 中
+* awsElasticBlockStore：可用挂载 AWS 上的 EBS 盘到容器，需要 k8s 运行在 AWS 的 EC2 上
+* nfs：Network File System 缩写，即网络文件系统
+* iscsi
+* flocker
+* glusterfs
+* rbd
+* cephfs
+* gitRepo：
+* secret
+* persistentVolumeClaim
+* downwardAPI
+* azureFileVolume
+* azureDisk
+* vsphereVolume
+* Quobyte
+* PortworxVolume
+* ScaleIO
+* FlexVolume
+* StorageOS
+* local
+
+`注意，这些 volume 并非全部都是持久化的，比如 emptyDir、secret、gitRepo 等，这些 volume 会随着 Pod 的消亡而消失。`
+
