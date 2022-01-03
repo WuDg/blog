@@ -2095,7 +2095,7 @@ k8s 支持以下 Volume 类型
 * glusterfs
 * rbd
 * cephfs
-* gitRepo：
+* gitRepo：将 git 代码拉到指定容器路径中
 * secret
 * persistentVolumeClaim
 * downwardAPI
@@ -2108,6 +2108,7 @@ k8s 支持以下 Volume 类型
 * FlexVolume
 * StorageOS
 * local
+* subPath：Pod 的多容器使用同一个 Volume 时
 
 `注意，这些 volume 并非全部都是持久化的，比如 emptyDir、secret、gitRepo 等，这些 volume 会随着 Pod 的消亡而消失。`
 
