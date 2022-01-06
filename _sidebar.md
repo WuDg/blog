@@ -17,6 +17,7 @@
 * [git](docs/git.md)
 * [top-命令](docs/top_comand.md)
 * [ruby](docs/ruby.md)
+* [招聘](docs/jd.md)
 * [react](docs/react.md) 
 * [kubernetes](docs/kubernetes.md)
 * [Kubernetes 简洁版](docs/kubernetes_simple_version.md)

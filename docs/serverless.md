@@ -469,6 +469,6 @@ CloudEvents 是供应商立的事件数据定义规范
 * Context
 * Data
 * Message
-* Protocel
+* Protocol
 
 
