@@ -10,7 +10,7 @@
 锁旨在强制实施互斥排他、并发控制策略。
 
 
-![java-lock](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/java-lock.jpg)
+![java-lock](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/java-lock.jpg)
 
 ## 一、公平锁/非公平锁
 > 公平锁是指多个线程按照申请锁的顺序来获取锁。

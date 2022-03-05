@@ -12,7 +12,7 @@ kubectl在$HOME/.kube目录中查找一个名为config的文件, 可以通过设
 kubectl通过与apiserver交互可以实现对k8s集群中各种资源的增删改查。
 
 
-![kubernetes](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/kubernetes.jpg)
+![kubernetes](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/kubernetes.jpg)
 
 
 ## 一、命令格式
@@ -117,7 +117,7 @@ kubectl通过与apiserver交互可以实现对k8s集群中各种资源的增删�
 12. `version` 打印客户端和服务版本信息
 
 ## 八、原图
-![Kubetcl命令](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/Kubetcl命令-1.jpg)
+![Kubetcl命令](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/Kubetcl命令-1.jpg)
 
 `原文:`
 * [learning_mind_map](https://github.com/0voice/learning_mind_map)

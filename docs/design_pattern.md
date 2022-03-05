@@ -77,7 +77,7 @@ GoF 归纳发表了23种在软件开发中使用频率较高的设计模式，�
 
 `常用设计模式一览表-学习难度-使用频率`
 
-![design-pattern-java](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/design-pattern-java.png)
+![design-pattern-java](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/design-pattern-java.png)
 
 ### 1.1.3 招式 VS 内功(三)
 
@@ -102,7 +102,7 @@ GoF 归纳发表了23种在软件开发中使用频率较高的设计模式，�
 > 在支持可维护性的同时，提高系统可复用性是一个至关重要的问题
 > 面向对象设计原则为支持可维护性可复用性而诞生
 
-![7种面向对象设计原则](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/origin-object-7-principle.png)
+![7种面向对象设计原则](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/origin-object-7-principle.png)
 
 ### 1.2.1 面向对象设计原则-单一职责原则
 
@@ -114,7 +114,7 @@ GoF 归纳发表了23种在软件开发中使用频率较高的设计模式，�
 
 初始设计方案结构图：
 
-![单一职责-Source](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/principal-single-responsibilities-source.jpg)
+![单一职责-Source](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/principal-single-responsibilities-source.jpg)
 
 `描述：`
 
@@ -125,7 +125,7 @@ GoF 归纳发表了23种在软件开发中使用频率较高的设计模式，�
 `重构`
 使用单一职责原则对其进行重构
 
-![单一职责-Target](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/principal-single-responsibilities-target.jpg)
+![单一职责-Target](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/principal-single-responsibilities-target.jpg)
 
 `描述：`
 
@@ -147,7 +147,7 @@ GoF 归纳发表了23种在软件开发中使用频率较高的设计模式，�
 `实例`
 需求：CRM系统需要可以显示各种类型的图表，如饼状图和柱状图等，为了支持多种图表显示方式，原始设计方案如图
 
-![开闭原则-原始](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/principal-open-close-source.jpg)
+![开闭原则-原始](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/principal-open-close-source.jpg)
 
 ChartDisplay 类中的display() 方法代码片段如下：
 
@@ -177,7 +177,7 @@ else if (type.equals("bar")) {
 1. 增加要给抽象图表类 AbstractChart，作为各种具体图表类的基类
 2. ChartDisplay类针对抽象图表类进行编程，由客户端决定具体使用哪种图表
 
-![开闭原则-重构](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/principal-single-responsibilities-target.jpg)
+![开闭原则-重构](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/principal-single-responsibilities-target.jpg)
 
 `描述`
 
@@ -203,7 +203,7 @@ else if (type.equals("bar")) {
 
 需求：客户可以分为VIP客户和普通客户两类，系统需要提供一个发送Email功能，原始设计方案如下
 
-![里氏替换-原始](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/lsp-principal-source.jpg)
+![里氏替换-原始](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/lsp-principal-source.jpg)
 
 `描述`
 
@@ -218,7 +218,7 @@ else if (type.equals("bar")) {
 2. CommonCustomer和VIPCustomer 类作为抽象客户类的子类
 3. 邮件发送类EmailSender 针对抽象客户类Customer编程，根据里氏替换原则，能够接受基类对象的方法必然能够接受子类对象
 
-![里氏替换-重构](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/lsp-principal-target.jpg)
+![里氏替换-重构](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/lsp-principal-target.jpg)
 
 `注意`
 
@@ -240,7 +240,7 @@ else if (type.equals("bar")) {
 
 原始设计方案结构图:
 
-![依赖注入-原始](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/principal-di-source.jpg)
+![依赖注入-原始](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/principal-di-source.jpg)
 
 `存在问题：`
 
@@ -257,7 +257,7 @@ else if (type.equals("bar")) {
 3. 根据里氏替换原则，程序在运行时，具体数据转换类对象将替换DataConvertor类型的对象
 4. 引入新的数据转换类时无需修改源代码，只需修改配置文件
 
-![依赖注入-重构](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/principal-di-target.jpg)
+![依赖注入-重构](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/principal-di-target.jpg)
 
 `上述重构中，使用了开闭原则、里氏替换原则和依赖倒转原则，大多数情况下，这三个设计原则会同时出现，开闭原则时目标，里氏替换原则时基础，依赖倒转原则是手段，相辅相成，相互补充，目标一致`
 
@@ -270,7 +270,7 @@ else if (type.equals("bar")) {
 
 需求：某CRM系统的客户数据显示模块设计如图所示
 
-![接口隔离-原始](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/isp-principal-source.jpg)
+![接口隔离-原始](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/isp-principal-source.jpg)
 
 `描述`
 
@@ -286,7 +286,7 @@ else if (type.equals("bar")) {
 
 `重构`
 
-![接口隔离-重构](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/isp-principal-target.jpg)
+![接口隔离-重构](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/isp-principal-target.jpg)
 
 `描述`
 
@@ -308,7 +308,7 @@ else if (type.equals("bar")) {
 
 描述：CRM系统设计初期，考虑客户数量不多，采用MySQL作为数据库，与数据库操作相关的类如 CustomerDAO 都需要连接数据库，而连接数据库的方法被封装在DBUtil中，由于需要重用DBUtil类的getConenction()方法，设计人员将CustomerDAO作为DBUtil的子类
 
-![合成复用-原始](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/principal-carp-source.jpg)
+![合成复用-原始](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/principal-carp-source.jpg)
 
 `问题描述`
 
@@ -324,7 +324,7 @@ else if (type.equals("bar")) {
 2. CustomerDAO和DBUtil之间的关系由继承变为关联，采用依赖注入方式将DBUtil对象注入CustomerDAO中
 3. 如果需要对DBUtil的功能进行扩展，可以通过其子类来实现，如MySQLDBUtil和OracleDBUtil类
 
-![合成复用-重构](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/principal-carp-target.jpg)
+![合成复用-重构](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/principal-carp-target.jpg)
 
 ### 1.2.7 面向对象设计原则-迪米特法则
 
@@ -349,7 +349,7 @@ else if (type.equals("bar")) {
 1. 界面控件之间交互关系复杂
 2. 在该窗口中增加新的界面控件时需要修改与其交互的其他控件的源代码，系统扩展性差，也不便于增删控件
 
-![迪米特法则-原始](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/principal-lkp-source.jpg)
+![迪米特法则-原始](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/principal-lkp-source.jpg)
 
 `重构`
 
@@ -359,7 +359,7 @@ else if (type.equals("bar")) {
 2. 引入中间类后界面控件之间不再发生直接引用，而是先将请求转发给中间类，在有中间类完成对其他控件的调用
 3. 当需要增加或者删除控件时，只需修改中间类即可
 
-![迪米特法则-重构](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/principal-lkp-target.jpg)
+![迪米特法则-重构](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/principal-lkp-target.jpg)
 
 # 二、创建型模式
 
@@ -432,11 +432,11 @@ public class Chart {
 > 增加几个角色：具体产品类、工厂类、抽象产品类
 > 定义：定义一个工厂类，它可以根据参数的不同返回不同类的实例，被创建的实例通常都具有共同的父类，因为简单工厂模式中创建实例的方法是静态方法，因此简单工厂模式又被称为静态工厂方法模式
 
-![简单工厂模式-原始](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/creative-simple-factory-pattern-source.png)
+![简单工厂模式-原始](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/creative-simple-factory-pattern-source.png)
 
 `完整解决方案`
 
-![简单工厂模式-重构](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/creative-simple-factory-pattern-target.png)
+![简单工厂模式-重构](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/creative-simple-factory-pattern-target.png)
 
 ```java
 /**
@@ -628,7 +628,7 @@ public abstract class AbstractChart {
 
 `使用简单工厂`
 
-![使用简单工厂](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/creative-factory-method-pattern-source.png)
+![使用简单工厂](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/creative-factory-method-pattern-source.png)
 
 ```java
 /**
@@ -683,7 +683,7 @@ public class LoggerFactory {
 
 `完整解决方案`
 
-![使用工厂方法模式](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/creative-factory-method-pattern-target.png)
+![使用工厂方法模式](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/creative-factory-method-pattern-target.png)
 
 ```java
 //日志记录器接口：抽象产品  
@@ -748,7 +748,7 @@ class Client {
 
 `重载的工厂方法`
 
-![重载的工厂方法](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/creative-factory-method-pattern-overload-target.png)
+![重载的工厂方法](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/creative-factory-method-pattern-overload-target.png)
 
 ```java
 interface LoggerFactory {  
@@ -784,7 +784,7 @@ class DatabaseLoggerFactory implements LoggerFactory {
 
 `工厂方法的隐藏`
 
-![工厂方法的隐藏](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/creative-factory-method-pattern-hidden-source.png)
+![工厂方法的隐藏](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/creative-factory-method-pattern-hidden-source.png)
 
 ```java
 //改为抽象类  
@@ -838,13 +838,13 @@ class Client {
 
 描述：开发一套界面皮肤库，可以对Java桌面软件进行界面优化。用户在使用时，可以通过菜单来选择皮肤，不同的皮肤将提供不同视觉效果的按钮、文本框、组合框等，其结构示意图如下：
 
-![界面皮肤结构图](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/java-desk-skin-map.png)
+![界面皮肤结构图](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/java-desk-skin-map.png)
 
 该皮肤库需要具备良好的灵活性和可扩展性，用户可以自由选择不同的皮肤，开发人员可以在不修改既有代码基础上新增皮肤
 
 使用工厂方法模式，初始结构图如下：
 
-![工厂方法模式](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/java-desk-skin-map-source.png)
+![工厂方法模式](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/java-desk-skin-map-source.png)
 
 `存在问题：`
 
@@ -854,19 +854,19 @@ class Client {
 `产品等级结构`：即产品的继承结构。如抽象类时电视机，子类时海尔电视机、海信电视机、TCL电视机
 `产品族`：在抽象工厂模式中，产品族指由同一个工厂生产，位于不同产品等级结构中的一组产品，如海尔电器工厂生产的海尔电视及、海尔冰箱
 
-![产品族与产品等级结构示意图](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/product-hiearachy.png)
+![产品族与产品等级结构示意图](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/product-hiearachy.png)
 
 `抽象工厂模式示意图`
 
-![抽象工厂模式示意图](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/abstract-factory-map.png)
+![抽象工厂模式示意图](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/abstract-factory-map.png)
 
 `抽象工厂模式结构图`
 
-![抽象工厂模式结构图](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/pattern-abstract-factory-target.png)
+![抽象工厂模式结构图](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/pattern-abstract-factory-target.png)
 
 `完整解决方案`
 
-![完整解决方案](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/pattern-java-desk-skin-map-target.png)
+![完整解决方案](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/pattern-java-desk-skin-map-target.png)
 
 ```java
 //在本实例中我们对代码进行了大量简化，实际使用时，界面组件的初始化代码较为复杂，还需要使用JDK中一些已有类，为了突出核心代码，在此只提供框架代码和演示输出。  
@@ -974,7 +974,7 @@ class SummerSkinFactory implements SkinFactory {
 2. 类内部定义私有静态实例
 3. 暴露内部定义的静态实例
 
-![单例模式](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/pattern-singleton.png)
+![单例模式](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/pattern-singleton.png)
 
 由于 `singleton = new Singleton()` 非原子操作，当在并发环境下，可能创建多个不同的 `singleton` 实例
 

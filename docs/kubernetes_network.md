@@ -9,7 +9,7 @@
 
 这里把 `k8s` 的网络分解为四个抽象层，编号 0~3，除了第 0 层外，每一层都是构建于前一层之上，如图：
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/k8s-network.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/k8s-network.png)
 
 第 0 层 `Node` 节点网络，保证 `k8s` 节点间通信的网络，这个网络一般由底层（公有云或数据中心）支持
 
@@ -19,7 +19,7 @@
 
 下面是Pod网络的简化概念模型：
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/pod-network.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/pod-network.png)
 
 `Pod` 网络构建于 `Node` 节点网络之上
 
@@ -28,7 +28,7 @@
 
 什么是共享网络栈？同一节点上的Pod之间如何寻址和通信？
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/pod-network-detail.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/pod-network-detail.png)
 
 上图节点中 `Pod` 网络依赖的 3 个网络设备：
 
@@ -45,7 +45,7 @@
 
 `Pod` 的IP是由`docker0`网桥分配的，如上图`docker0`网桥IP是`172.17.0.1`,此时，如果再启动其他`Pod`，由于这些 `Pods` 都连在同一个网桥上，即再同一个网段内，因此 `Pod` 间可以进行 IP 寻址和通信，如下图：
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/pod-network-between.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/pod-network-between.png)
 
 从上图得，节点内Pod网络在 `172.17.0.0/24` 这个地址空间内，而节点主机在 `10.100.0.0/24` 地址空间内，即 `Pod` 网络和节点网络在不同网络中
 
@@ -58,7 +58,7 @@
 节点网络和 `Pod` 网络不在同一个网络地址空间内，此时 `host1` 上的 `PodX` 如何与 `host2` 上的 `PodY` 通信？
 
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/two-node-pod-network.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/two-node-pod-network.png)
 
 实际上不同节点间的 `Pod` 网络通信有很多技术方案，这里介绍下面两种：
 1. 路由：通过路由设备为 `k8s` 集群的 `Pod` 网络单独划分网段，并配置路由器支持 `Pod` 网络的转发。依赖底层网络设备，无额外性能开销
@@ -67,7 +67,7 @@
 ### 1.3 CNI
 > 为了简化 `Pod` 网络集成，`k8s` 支持 `CNI(Container Network Interface)`标准，不同的 `Pod` 网络技术可以通过CNI插件形式和 `k8s` 进行集成。
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/pod-network-cni.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/pod-network-cni.png)
 
 ### 1.4 总结
 1. `k8s` 网络分为 4 层，每一层都构建于上一层
@@ -79,7 +79,7 @@
 
 Pod 网络存在的前提下，下图是 `Service` 网络的简化概念模型
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/service-netword-model.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/service-netword-model.png)
 
 k8s通过引入一层 `Account-Service` 来实现下面的功能
 * 服务发现：`Client Pod` 发现并定位 `Account-App` 集群中的 `Pod IP`。`Account-Service`提供统一的`ClusterIP`，`Client`通过`ClusterIP` 就可以访问 `Account-App` 集群中的 `Pod`，这里的 `ClusterIP` 是虚拟IP
@@ -87,7 +87,7 @@ k8s通过引入一层 `Account-Service` 来实现下面的功能
 
 ### 2.1 服务发现技术
 > `DNS` 域名服务，可以认为是最早的一种服务发现技术
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/service-find-map.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/service-find-map.png)
 
 `方案1`
 `Pod`运行时，`k8s` 把 `Account-App`的 `Pod` 集群信息自动注册到 `DNS`，`Client` 应用通过域名查询 `DNS` 查找目标 `Pod`，然后发起调用
@@ -101,7 +101,7 @@ k8s通过引入一层 `Account-Service` 来实现下面的功能
 `方案2`
 引入 `Service Registry + Client` 配合，目前主流产品如：`Eureka + Ribbon`，`Consul`，`Nacos`等
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/service-find-registry-map.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/service-find-registry-map.png)
 
 `k8s` 自身的分布式存储 `etcd` 就可以实现 `Service Registry`。运行时 `k8s` 把 `Account-App` 和 `Pod` 信息注册到 `Service Registry`，`Client` 应用通过 `Service Registry` 查询目标 `Pod`。
 
@@ -113,7 +113,7 @@ k8s通过引入一层 `Account-Service` 来实现下面的功能
 
 Service Registry + DNS
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/service-find-service-registry-map.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/service-find-service-registry-map.png)
 
 `k8s` 集群每个`worker`节点都部署有两个组件：
 1. kubelet
@@ -156,7 +156,7 @@ Service Registry + DNS
 
 下图是`NodePort`暴露服务的简化概念模型：
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/service-network-nodeport.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/service-network-nodeport.png)
 
 我们要将 `k8s` 内部某个服务通过 `NodePort` 方式暴露出去，只需将服务  `type` 设定为 `NodePort`，同时指定一个范围在 3000~32767 内的对外暴露端口。服务发布后，`k8s` 在每个 `worker` 节点都会开启这个监听端口，这个监听端口背后时 `Kube-Proxy`
 
@@ -166,7 +166,7 @@ Service Registry + DNS
 
 服务以 `NodePort` 方式暴露出去，`k8s` 会在每个 `worker` 节点上都开启对应的 `NodePort` 端口。逻辑上看，`k8s` 集群中所有的节点都会以集群的方式暴露这个服务。既然是集群，就会涉及到负载均衡问题，因此引入负载均衡器（`LoadBalancer`）。下图是通过 `LoadBalancer` 将服务对外暴露的概念模型。
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/service-network-nodeport-loadbalancer.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/service-network-nodeport-loadbalancer.png)
 
 `基于阿里云`
 将 `k8s` 内部服务通过 `LoadBalancer` 方式暴露出去，可以将服务 `type` 设定为 `LoadBalancer`。服务发布后，`k8s` 集群会自动创建服务的 `NodePort` 端口转发，同时自动帮我们申请一个 `SLB`，有独立公网 `IP`，并且 `k8s` 会自动把 `SLB` 映射到后台 `k8s` 集群对应的 `NodePort` 上。这样通过 `SLB` 的公网 `IP` 就可以访问到 `k8s` 内部服务。
@@ -180,7 +180,7 @@ Service Registry + DNS
 **Ingress：** 即 `k8s` 内部的福利部署的反向代理服务
 
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/service-network-ingress-loadbalancer.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/service-network-ingress-loadbalancer.png)
 
 `Ingress` 就是一个特殊的 `Service`，通过节点的 `HostPort(80/443)`暴露出去，前置一般也有LB做负载均衡。
 
@@ -192,12 +192,12 @@ Service Registry + DNS
 
 现代的微服务网关 `Zuul，Gateway，Kong，Envoy，Traefik`等
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/service-network-ingress-detail.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/service-network-ingress-detail.png)
 
 ### 3.4 Kubectl Proxy & Port Forward
 > 上述的 `NodePort/LoadBalancer/Ingress` 主要针对正式环境，本地开发测试环境的调试可以使用下面方法
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/kubectl-proxy.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/kubectl-proxy.png)
 
 1. 通过`kubectl proxy` 命令，在本机开启一个代理服务，通过这个代理服务，可以访问k8s集群内的任意服务。原理是通过 `Master` 上的 `API Server` 简介访问 `k8s` 集群内服务，因为 `Master` 知道集群内所有服务信息
 2. 通过`kubectl port-forward`命令，它可以在本机开启一个转发端口，间接转发到k8s内部的某个Pod端口上。这样，我们通过本机端口就可以访问 `k8s` 集群内的 `Pod`。这种方式是 `TCP` 转发
@@ -216,7 +216,7 @@ Service Registry + DNS
 
 `表格总结：`
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/k8s-network-table.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/k8s-network-table.png)
 
 
 [原文地址](https://blog.csdn.net/qq_35789269/article/details/113922038)

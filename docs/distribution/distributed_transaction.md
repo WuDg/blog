@@ -22,7 +22,7 @@ position： 杭州
 
 [原文地址](https://mp.weixin.qq.com/s?__biz=MzkxNTE3NjQ3MA==&mid=2247485728&idx=1&sn=f1ea6c37d5eb0d2a69315a08b0d1263b&source=41#wechat_redirect)
 
-![分布式事务](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/distribute_transaction.png)
+![分布式事务](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/distribute_transaction.png)
 
 ## 一、事务
 > ACID 是严格意义上的定义，指事务的实现必须具备原子性、一致性、隔离性和持久性
@@ -32,7 +32,7 @@ position： 杭州
 > 由于互联网快速发展，过去的单体架构难以支撑如今的流量。
 > 且服务难以动态伸缩，因此进行服务拆解势在必行，由此产生微服务架构
 
-![微服务框架](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/microservices.png)
+![微服务框架](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/microservices.png)
 
 每个服务能独立运行，独立部署
 服务之间由本地调用变成远程调用，调用链路边长了，一次调用的耗时更长了，但是总体的吞吐量更大了
@@ -53,7 +53,7 @@ position： 杭州
 > Two-phase commit protocal，两阶段提交协议。准备阶段和提交、回滚阶段
 > 引入了一个事务协调者角色，来管理各个参与者（即各数据库资源）
 
-![2pc](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/2pc.png)
+![2pc](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/2pc.png)
 
 2PC 事务协调者有超时机制
 
@@ -94,14 +94,14 @@ AP <-> RMv
 > InnoDB 支持
 > 简单来说就是要先定义一个全局唯一的 XID，然后告知每个事务分支要进行的操作。
 
-![MySQL_XA](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/MySQL_XA.png)
+![MySQL_XA](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/MySQL_XA.png)
 
 
 ### 3PC
 > 解决2PC同步阻塞和减少数据不一致情况
 >相比于2PC，多了一个询问阶段，即准备、预提交和提交
 
-![3pc](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/3pc.png)
+![3pc](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/3pc.png)
 
 出发点好，但是事务绝大部分情况，因此每次都多了一个交互阶段
 并引入超时机制，若协调者挂了，并已经到了提交阶段，参与者等待超时则自动提交事务
@@ -124,7 +124,7 @@ AP <-> RMv
 > TCC 分为 Try、Confirm、Cancel，主要用于跨数据库、跨服务的业务操作的数据一致性问题
 > 第一阶段是资源检查预留阶段，即Try。第二阶段是提交或者回滚
 
-![TCC](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/TCC.png)
+![TCC](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/TCC.png)
 
 对业务有侵入，但TCC没有资源的阻塞
 
@@ -142,13 +142,13 @@ AP <-> RMv
 通过回滚日志补偿恢复
 需要引入全局锁的概念，否则会出现回滚了其他事务提交的数据
 
-![seata-at](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/seata-at.png)
+![seata-at](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/seata-at.png)
 
 因为整个过程全局锁在 tx1 结束前一直是被 tx1 持有的，所以不会发生脏写的问题。
 
-![seata-at-2](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/seata-at-2.png)
+![seata-at-2](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/seata-at-2.png)
 
 `TCC模式`
 > 把自定义的分支事务纳入全局事务的管理中
 
-![seata-tcc](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/seata-tcc.png)
+![seata-tcc](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/seata-tcc.png)

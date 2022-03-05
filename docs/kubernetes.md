@@ -44,7 +44,7 @@
 
 
 ### 1.1.1. 时光回溯
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/container_evolution.svg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/container_evolution.svg)
 
 **传统部署时代：**
 早期，在物理服务器上运行应用程序。无法为应用程序定义资源边界，导致资源分配问题。可能出现某个应用程序占用大部分资源，同时导致其他应用程序的性能下降。
@@ -92,7 +92,7 @@
 > kubernetes 集群由一组被称为节点的机器组成。集群至少一个工作节点。
 > 工作节点托管作为应用负载的组件 Pod。控制平面管理集群中的工作节点和 Pod。为集群提供故障转移和高可用性
 
-![所有相互关联组件](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/components-of-kubernetes.svg)
+![所有相互关联组件](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/components-of-kubernetes.svg)
 
 **控制平面组件**
 > 控制平板的组件对集群做出全局决策（如调度），以及检测和响应集群事件（如 当不满足部署的 replicas 字段时，启动新的 Pod）

@@ -1,6 +1,6 @@
 # MySQL-锁
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/mysql.jpg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/mysql.jpg)
 ---
 
 ## 一、锁的认识

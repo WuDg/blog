@@ -7,7 +7,7 @@
 
 top命令经常用来监控linux的系统状况，比如cpu、内存的使用。
 
-![top](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/top.png)
+![top](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/top.png)
 
 ---
 ## 一、命令格式

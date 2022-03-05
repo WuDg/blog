@@ -16,7 +16,7 @@
 
 
 
-![github_jsdeliver_picgo](https://cdn.jsdelivr.net/gh/wudg/blog@master/images/github_jsdeliver_picgo.png)
+![github_jsdeliver_picgo](https://cdn.jsdelivr.net/gh/wudg/blog@master/images/blog/github_jsdeliver_picgo.png)
 
 
 ## 一 github 存储
@@ -47,7 +47,7 @@
 
 1. 下载并安装 [picgo](https://github.com/Molunerfinn/picgo/releases)
 2. 进入PicGo 软件，选择【Github图床】进行配置
-![picgo_github_config](https://cdn.jsdelivr.net/gh/wudg/blog@master/images/picgo_github_config.png)
+![picgo_github_config](https://cdn.jsdelivr.net/gh/wudg/blog@master/images/blog/picgo_github_config.png)
 3. 手动将图片拖至 PicGo 上传区即可将图片上传到我们的github仓库中对应的图片文件夹下
 
 `注意`

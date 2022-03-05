@@ -37,13 +37,13 @@ Kubernetes 主要由以下几个核心组件组成：
 * Container runtime 负责镜像管理以及 Pod 和容器的运行（CRI）
 * kube-let 负责为 Service 提供 Cluster 内部的服务发现和负载均衡
 
-![architecture](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/architecture.png)
+![architecture](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/architecture.png)
 
 ## 核心原理
 
 **架构原理**
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/components.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/components.png)
 
 除了核心组件，还有一些推荐的插件
 
@@ -56,7 +56,7 @@ Kubernetes 主要由以下几个核心组件组成：
 
 **分层架构（架构原理）**
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/14937095836427.jpg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/14937095836427.jpg)
 
 * 核心层：Kubernetes 最核心的功能，对外提供 API 构建高层的应用，对内提供插件式应用执行环境
 * 应用层：部署（无状态应用、有状态应用、批处理任务、集群应用等）和路由（服务发现、DNS 解析等）
@@ -69,23 +69,23 @@ Kubernetes 主要由以下几个核心组件组成：
 
 **核心组件（架构原理）**
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/core-packages.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/core-packages.png)
 
 **核心 API（架构原理）**
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/core-apis.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/core-apis.png)
 
 **生态系统（架构原理）**
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/core-ecosystem.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/core-ecosystem.png)
 
 **核心组件（通信）**
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/components1.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/components1.png)
 
 **Pod 创建流程**
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/workflow.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/workflow.png)
 
 * 用于通过 REST API 创建一个 POD
 * API Server 将其写入 etcd
@@ -95,7 +95,7 @@ Kubernetes 主要由以下几个核心组件组成：
 
 **端口号**
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/ports.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/ports.png)
 
 ### ectd
 
@@ -124,7 +124,7 @@ leader 选举：通过心跳机制和投票
 
 kube-apiserver 支持同时提供 https 和 http API，其中 http API 是非安全接口，不做任何认证授权机制，不建议生产环境启用
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/API-server-space.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/API-server-space.png)
 
 实际使用中，通常通过 kubectl 来调用 apiserver，也可也通过 kubernetes 各个语言的 client 库来访问 apiserver
 
@@ -142,17 +142,17 @@ kubectl get pod -n ns --v=8
 
 kube-apiserver 提供 k8s 的 REST API，实现了认证、授权、准入控制等安全校验功能，同时也负责集群状态的存储操作（通过 etcd）
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/kube-apiserver.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/kube-apiserver.png)
 
 以 `/apis/batch/v2alpha1/jobs` 为例
 
 GET 请求的处理过程如下图：
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/API-server-flow.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/API-server-flow.png)
 
 POST 请求的处理过程如下图：
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/API-server-storage-flow.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/API-server-storage-flow.png)
 
 **API 访问**
 
@@ -317,7 +317,7 @@ kube-scheduler --address=127.0.0.1 --leader-elect=true --kubeconfig=/etc/kuberne
 
 **kube-scheduler 工作原理**
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/kube-scheduler-choose-node.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/kube-scheduler-choose-node.png)
 
 `kube-scheduler` 调度分为两个阶段，predicate 和 priority
 
@@ -328,7 +328,7 @@ kube-scheduler --address=127.0.0.1 --leader-elect=true --kubeconfig=/etc/kuberne
 
 由 kube-controller-manager 和 cloud-controller-manager 组成，是 k8s 的大脑，它通过 apiserver 监控整个集群的状态，并确保集群处于预期的工作状态
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/post-ccm-arch.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/post-ccm-arch.png)
 
 kube-controller-manager 由一系列的控制器组成
 
@@ -446,7 +446,7 @@ cAdvisor 是一个开源的分析容器资源使用率和性能特性的代理�
 
 kubelet 会监控资源使用情况，并使用驱逐机制防止计算和存储资源耗尽
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/kubelet_eviction.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/kubelet_eviction.png)
 
 
 `驱逐信号分为软驱逐和硬驱逐`
@@ -494,11 +494,11 @@ CIR 将 kubelet 与容器运行时解耦，将原来完全面向 Pod 级别的�
 * 容器执行引擎：如 dockershim、rkt 等
 * 网络插件：目前支持 CNI 和 kubenet
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/kubelet.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/kubelet.png)
 
 **Pod 启动流程**
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/pod-start.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/pod-start.png)
 
 **查看 Node 汇总指标**
 
@@ -539,17 +539,17 @@ cut -f1 -d " "  /proc/modules | grep -e ip_vs -e nf_conntrack_ipv4
 
 **Iptables 示例**
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/iptables-mode.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/iptables-mode.png)
 
 **ipvs 示例**
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/ipvs-mode.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/ipvs-mode.png)
 
 **kube-proxy 工作原理**
 
 kube-proxy 监听 API Server 中的 service 和 endpoint 的变化情况，并通过 userspace、iptables、ipvs 或 winuserspace 等 proxier 来为服务配置负载均衡
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/kube-proxy.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/kube-proxy.png)
 
 **kube-proxy 不足**
 
@@ -1152,7 +1152,7 @@ kubectl rollout undo deployment/nginx-deployment
 
 Ingress 就是为进入集群的请求提供路由规则的集合，如下图所示：
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/image-20190316184154726.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/image-20190316184154726.png)
 
 使用 Ingress 前，需要先部署一个 `Ingress Controller`，它监听 Ingress 和 Service 的变化，并根据规则配置负载均衡提供访问入口
 
@@ -1264,13 +1264,13 @@ Ingress Controller 类型多样，需要用户选择合适自己集群的 Ingres
 
 根据 `.spec.completions` 和 `.spec.Parallelism` 的设置，可以将 Job 划分为以下几种 pattern：
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/job-patterns.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/job-patterns.png)
 
 **Job Controller**
 
 Job Controller 负责根据 Job Spec 创建 Pof，并持续监控 Pod 的状态，直至成功结束。如果失败，则根据 restartPolicy 决定是否创建新的 Pod 再次重试任务
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/job.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/job.png)
 
 简单示例：
 
@@ -1407,7 +1407,7 @@ Node 是 Pod 运行的主机，可以是物理机和虚拟机
 
 为了管理 Pod，每个 Node 节点至少要运行`容器运行时`、kubelet、kube-proxy
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/node.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/node.png)
 
 **Node 管理**
 
@@ -1545,7 +1545,7 @@ Pod 是一组紧密关联的容器集合，它们共享 IPC、Network 和 UTS na
 
 Pod 设计理念：支持多个容器在一个 Pod 中共享网络和文件系统，可用通过进程间通信和文件共享方式来高效完成合作
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/pod.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/pod.png)
 
 **Pod 定义**
 
@@ -1971,7 +1971,7 @@ Service、Endpoints、Pod 支持三种类型协议：
 
 kube-proxy 负责将 service 负载均衡到 Pod 中
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/service-flow.png)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/service-flow.png)
 
 ### ServiceAccount
 

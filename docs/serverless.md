@@ -40,7 +40,7 @@ Serverless（无服务架构）是指服务端逻辑由开发者实现，应用�
 
 Serverless 是云原生技术发展的高级阶段，可以使开发者更聚集在业务逻辑，而减少基础架构的关注。
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/b2276d665a511c4404f25fe596cce34e.jpeg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/b2276d665a511c4404f25fe596cce34e.jpeg)
 
 ### 定义
 
@@ -98,7 +98,7 @@ PaaS 是对软件的一个更高的抽象层面，已经接触到应用程序的
 
 **Serverless**
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/2ee92aa5b8b4e7aa6e5b881094ff580a.jpeg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/2ee92aa5b8b4e7aa6e5b881094ff580a.jpeg)
 
 Serverless 的商业化产品：
 
@@ -129,19 +129,19 @@ FaaS（Function as a Service）函数即服务，FaaS 是无服务器计算的�
 
 FaaS 本质上是一种事件驱动的由消息触发的服务，FaaS 供应商一般会集成各种同步和异步事件源，通过订阅这些事件源，可以直接触发或者定期的触发函数运行
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/5dc80e9e306067e7d1c592e2d47c768f.jpeg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/5dc80e9e306067e7d1c592e2d47c768f.jpeg)
 
 传统的服务器端软件不同是经应用程序部署到拥有操作系统的虚拟机或者容器中，一般需要长时间驻留在操作系统中运行，而 FaaS 是直接将程序部署到平台即可，当有事件到来时触发执行，执行完了就可以直接卸载
 
 
 Function as a Service 全景图
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/b19cb7f133a96f1702827aae2f2e9256.jpeg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/b19cb7f133a96f1702827aae2f2e9256.jpeg)
 
 
 Serverless Landscape
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/bdcde0aa21cad57cec4d139c717268ce.jpeg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/bdcde0aa21cad57cec4d139c717268ce.jpeg)
 
 
 ### Serverless 使用场景
@@ -171,7 +171,7 @@ Serverless Landscape
 
 传统的应用程序架构可能如下：
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/aa9eaf9b461ca39ea6b4bf01fc5f129b.jpeg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/aa9eaf9b461ca39ea6b4bf01fc5f129b.jpeg)
 
 * 一个 app 前端（IOS 或 安卓）
 * 用 Java 写开发的后端服务，使用 JBoss 或 Tocmat 做 server 运行
@@ -180,7 +180,7 @@ Serverless Landscape
 架构优点：可以让前端十分轻便，不需要做什么应用逻辑，只是负责渲染用户界面，将请求通过 HTTP 发送给后端服务，而所有的数据操作都是由后端的 Java 程序来完成
 架构缺点：维护起来十分复杂，前端开发、后端开发都需要十分专业的人员，环境的配置以及数据库的维护、应用的更新和升级
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/37377bea471dae7039d9335f7b232a8e.jpeg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/37377bea471dae7039d9335f7b232a8e.jpeg)
 
 
 而在 Serverless 架构中，我们不需要在服务器端代码中存储任何会话状态，而是直接将它们存储在 NoSQL 上，这样将使应用程序无状态，有助于弹性扩展。前端可以直接利用 BaaS 而减少后端的编码需求，这样架构的本质上使减少了应用程序开发的人力成本，减降低了自己维护基础设施的风险，而且利用云的能力更便于扩展和快速迭代
@@ -249,11 +249,11 @@ thanos - Highly available Prometheus setup with long term storage capabilities.
 
 FaaS 函数定义
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/e888f323592ff741aa91171e63ef8253.jpeg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/e888f323592ff741aa91171e63ef8253.jpeg)
 
 FaaS 中函数输入、context及输出
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/e11e5e4a99003a2b7f65557b7f4f57d0.jpeg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/e11e5e4a99003a2b7f65557b7f4f57d0.jpeg)
 
 
 **函数生命周期**
@@ -262,7 +262,7 @@ FaaS 中函数输入、context及输出
 
 函数创建完成后通过函数部署流水线
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/895f6edfd8bdcfb728a850101cf65faf.jpeg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/895f6edfd8bdcfb728a850101cf65faf.jpeg)
 
 函数的生命周期始于编写代码并提供规范和元数据， `build` 实体将获取代码和规范进行编译，如何将其转换为工件（代码二进制文件、程序包或容器、镜像）。如何将工件部署到具有控制器实体的集群上，该控制器实体负责根据事件的流量和实例上的负载来扩展函数实例的数量
 
@@ -282,7 +282,7 @@ Serverless 框架使用以下动作（Action）控制函数的生命周期
 10. 获取统计信息：返回有关函数运行时使用情况的统计信息（调用次数、瓶颈运行事件、瓶颈延迟、失败、重试等）
 11. 获取日志：返回函数生成的日志（函数创建、删除、显式错误、警告、调试消息、函数 Stdout 或 Stderr）
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/e6eaf2ccd5ee2cd89e4ef9a9cd051010.jpeg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/e6eaf2ccd5ee2cd89e4ef9a9cd051010.jpeg)
 
 创建函数时需要提供函数的元数据，创建的函数可能会被编译和发布。稍后可以启动（start）、禁用（disable）和启用（enable）函数。函数部署需要能够支持以下用例：
 
@@ -346,7 +346,7 @@ Serverless 框架使用以下动作（Action）控制函数的生命周期
 2. 异步消息队列调用（Pub/Sub：如 RabbitMQ
 3. 消息/记录流：如 Kafka
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/a67e06bb4966d4b11ee19b82e815fe7c.jpeg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/a67e06bb4966d4b11ee19b82e815fe7c.jpeg)
 
 `函数代码`
 
@@ -428,7 +428,7 @@ Serverless 应用是由事件驱动的
 
 Workflow 用于表示一系列事件或函数运行结果触发状态变更并运行相应函数的流程，如图
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/7e56fbc1bb180fef422e73f8e1511c70.jpeg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/7e56fbc1bb180fef422e73f8e1511c70.jpeg)
 
 **CloudEvents**
 
@@ -441,7 +441,7 @@ CloudEvents 是供应商立的事件数据定义规范
 
 **术语**
 
-![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/59011d103a197db635d1c8d1baefdfa8.jpeg)
+![](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/59011d103a197db635d1c8d1baefdfa8.jpeg)
 
 示例：
 

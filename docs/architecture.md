@@ -35,40 +35,40 @@
 * 每个主体任务
 * 主体间的联系
 
-![business_map](../images/business_map.png)
+![business_map](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/business_map.png)
 
 ### 3.2. 任务流程图
 
 > 产品级流程，细化业务流程
 
-![job_map](../images/job_map.png)
+![job_map](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/job_map.png)
 
 ### 3.3. 页面流程图
 
 > 梳理页面跳转关系，给前端用
 
-![page_map](../images/page_map.png)
+![page_map](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/page_map.png)
 
 ### 3.4. UI 设计图标注
 
 > 标注页面细节参数，如字号、字体、RGB颜色等
 
-![ui_map](../images/ui_map.png)
+![ui_map](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/ui_map.png)
 
 ### 3.5. 系统架构设计图
 
 > 架构不断演化、精炼
 
-![system_map](../images/system_map.png)
+![system_map](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/system_map.png)
 
 ### 3.6. 序列图
 
 > 架构师进行详细设计，梳理程序模块间调用关系，给到开发进行开发
 
-![sequence_map.png](../images/sequence_map.png)
+![sequence_map.png](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/sequence_map.png)
 
 ### 3.7. 类图
 
 > 描述数据库表结构之间关系
 
-![class_map.pngp](../images/class_map.png)
+![class_map.pngp](https://cdn.jsdelivr.net/gh/wudg/picgo@master/images/blog/class_map.png)
