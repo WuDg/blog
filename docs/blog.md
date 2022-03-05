@@ -6,6 +6,12 @@
 * hexo
 * halo
 * hugo
+* jekyll
+* wordpress
 
 ## 插件
 * gittalk：评论
+
+## 部署工具
+* [netlify](https://www.netlify.com/)
+* [vercel](https://vercel.com/)
