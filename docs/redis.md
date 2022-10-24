@@ -120,4 +120,4 @@ redis 内部使用文件处理器，单线程架构。采用 IO 多路复用机�
 * Redisson
 * Lettuce
 
-[我的博客即将同步至腾讯云开发者社区，邀请大家一同入驻：](https://cloud.tencent.com/developer/support-plan?invite_code=36jbvrp4kjs4k)
+我的博客即将同步至腾讯云开发者社区，邀请大家一同入驻：https://cloud.tencent.com/developer/support-plan?invite_code=36jbvrp4kjs4k
